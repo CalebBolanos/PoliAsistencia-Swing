@@ -612,6 +612,16 @@ public class traerDatos {
                     int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
                     String horario = horas[horIn] + " - " + horas[horaF];
                     dato[dia] = horario;
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[6] = rs.getString("Nombre");
+                        dato[0] = rs.getString("materia");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
                 }else{
                     if(contador==1){
                         dato[7] = idUnidad+"";
@@ -667,10 +677,13 @@ public class traerDatos {
             int dato2[]=new int[5];
             while(rs.next()){
                 if(rs.getInt("idUnidad") == idUnidad){
-                    int dia = rs.getInt("idDia");
+                    int dia = rs.getInt("idDia")-1;
                     dato1[dia] = rs.getInt("idHorarioI");
                     dato2[dia] = rs.getInt("idHorarioF");
-                    
+                    if(rs.isLast()){
+                        arr1.add(dato1); 
+                        arr2.add(dato2); 
+                    }
                 }else{
                     if(contador==1){
                         arr1.add(dato1); 
@@ -680,7 +693,7 @@ public class traerDatos {
                     contador=1;
                     dato1=new int[5];
                     dato2=new int[5];
-                    int dia = rs.getInt("idDia");
+                    int dia = rs.getInt("idDia")-1;
                     dato1[dia]= rs.getInt("idHorarioI");
                     dato1[dia] = rs.getInt("idHorarioF");
                     if(rs.isLast()){
