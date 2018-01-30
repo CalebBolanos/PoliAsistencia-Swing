@@ -75,7 +75,7 @@ public class unidadesGrupos implements ActionListener, MouseListener, KeyListene
     public unidadesGrupos(String nombreR) {
         nombreS = nombreR;
         ventana = new JFrame("Agregar unidades a un grupo - PoliAsistencia");
-        ventana.setBounds(30, 30, 1300, 650);
+        ventana.setBounds(10, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image icono = new ImageIcon(getClass().getResource("/img/poliAsistencia.png")).getImage();
         ventana.setIconImage(icono);
@@ -106,7 +106,7 @@ public class unidadesGrupos implements ActionListener, MouseListener, KeyListene
 
         //Titulos
         titulo = new JLabel("Agregar unidades a un grupo");
-        titulo.setBounds(490, 5, 700, 100);
+        titulo.setBounds(280, 5, 800, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
         ventana.add(titulo);
@@ -162,7 +162,7 @@ public class unidadesGrupos implements ActionListener, MouseListener, KeyListene
         abajo.add(descripcion);
         
         descripcion = new JLabel("Da clic en una materia para cambiarla de tabla");
-        descripcion.setBounds(400, 140, 900, 40);
+        descripcion.setBounds(400, 100, 900, 40);
         descripcion.setFont(subtitulos);
         descripcion.setForeground(azulAcento);
         abajo.add(descripcion);
