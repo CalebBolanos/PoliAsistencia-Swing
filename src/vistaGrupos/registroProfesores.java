@@ -241,7 +241,7 @@ public class registroProfesores implements ActionListener {
         ventana.add(lineaCont2);
 
         guardar = new JButton("Registrar Profesor");
-        guardar.setBounds(700, 520, 200, 50);
+        guardar.setBounds(500, 520, 200, 50);
         guardar.setBackground(blanco);
         guardar.setBorder(BorderFactory.createLineBorder(azulAcento, 2));
         guardar.setFont(new java.awt.Font("Arial", 0, 18));
@@ -249,14 +249,14 @@ public class registroProfesores implements ActionListener {
         guardar.addActionListener(this);
         ventana.add(guardar);
         
-        huella = new JButton("Huella Digital");
-        huella.setBounds(400, 520, 200, 50);
-        huella.setBackground(blanco);
-        huella.setBorder(BorderFactory.createLineBorder(azulAcento, 2));
-        huella.setFont(new java.awt.Font("Arial", 0, 18));
-        huella.setForeground(azulAcento);
-        huella.addActionListener(this);
-        ventana.add(huella);
+//        huella = new JButton("Huella Digital");
+//        huella.setBounds(400, 520, 200, 50);
+//        huella.setBackground(blanco);
+//        huella.setBorder(BorderFactory.createLineBorder(azulAcento, 2));
+//        huella.setFont(new java.awt.Font("Arial", 0, 18));
+//        huella.setForeground(azulAcento);
+//        huella.addActionListener(this);
+//        ventana.add(huella);
               
 
         abajo = new JPanel();

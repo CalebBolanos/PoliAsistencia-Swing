@@ -87,7 +87,7 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
         ventana.add(titulo);
 
         ImageIcon atras = new ImageIcon(new ImageIcon(getClass().getResource("/img/atras.png")).getImage());
-        cerrar = new JButton("<html>&nbsp;Opciones</html>", atras);
+        cerrar = new JButton("<html>&nbsp;Atras</html>", atras);
         cerrar.setBounds(20, 23, 200, 50);
         cerrar.setBackground(azulAcento);
         cerrar.setBorder(BorderFactory.createLineBorder(blanco, 2));
@@ -153,7 +153,7 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            inscribirAlumnosMenu abrir = new inscribirAlumnosMenu();
+            elegirOpcion abrir = new elegirOpcion();
             abrir.crearComponentes(true);
         }
 

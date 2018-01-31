@@ -34,32 +34,51 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import controlador.baseDeDatos;
-import java.awt.HeadlessException;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import poliasistencia.login;
 
 public class sesionConHuella extends javax.swing.JFrame {
+
     private int[] personaInt = new int[2];
+
     public sesionConHuella() {
+
+        setTitle("Iniciar Sesion");
+        setBounds(30, 30, 1300, 650);
+        Image icono = new ImageIcon(getClass().getResource("/img/poliAsistencia.png")).getImage();
+        setIconImage(icono);
+        setResizable(false);
+        setLayout(null);
         initComponents();
     }
-    
+
     private void initComponents() {
-
-        panHuellas = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        lblImagenHuella = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("INICIAR SESION");
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
+                login loge = new login();
+                loge.crearComponentes(true);
                 formWindowClosing(evt);
             }
 
@@ -67,21 +86,59 @@ public class sesionConHuella extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
+        blanco = new Color(255, 255, 255);
+        azulAcento = new Color(0, 145, 234);
+        azul = new Color(0, 176, 255);
+        rojo = new Color(254, 0, 0);
+        verde = new Color(87, 166, 57);
+        subtitulos = new Font("Calibri", 0, 40);
+        titulopb = new Font("Calibri", 1, 103);
+        titulop = new Font("Calibri", 0, 90);
+        titb = new Font("Calibri", 1, 93);
+        tit = new Font("Calibri", 0, 80);
 
-        panHuellas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        panHuellas.setPreferredSize(new java.awt.Dimension(400, 270));
-        panHuellas.setLayout(new java.awt.BorderLayout());
+        defauult = new JPanel();
+        defauult.setLayout(null);
+        defauult.setBackground(blanco);
+        defauult.setBounds(0, 0, 1300, 650);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(lblImagenHuella, java.awt.BorderLayout.CENTER);
+        //Titulos
+        titulo = new JLabel("Poli");
+        titulo.setBounds(390, 240, 150, 100);
+        titulo.setFont(titulop);
+        titulo.setForeground(azul);
+        defauult.add(titulo);
 
-        panHuellas.add(jPanel1, java.awt.BorderLayout.CENTER);
+        tituloBold = new JLabel("Asistencia");
+        tituloBold.setBounds(525, 237, 450, 100);
+        tituloBold.setFont(titulopb);
+        tituloBold.setForeground(azulAcento);
+        defauult.add(tituloBold);
 
-        getContentPane().add(panHuellas, java.awt.BorderLayout.NORTH);
+        subtitulo = new JLabel("Coloca el dedo en el sensor para iniciar sesion");
+        subtitulo.setIcon(new ImageIcon(getClass().getResource("/img/huella.png")));
+        subtitulo.setFont(subtitulos);
+        subtitulo.setForeground(azulAcento);
+        subtitulo.setBounds(170, 350, 1000, 100);
+        defauult.add(subtitulo);
 
-        setSize(new java.awt.Dimension(469, 346));
-        setLocationRelativeTo(null);
+        defauult.setVisible(true);
+        add(defauult);
+
+   
+        
+
+        
+
+       
+
+        //Contenido
+
+        /*
+         b2.setVerticalTextPosition(AbstractButton.BOTTOM);
+         b2.setHorizontalTextPosition(AbstractButton.CENTER);
+         */
+        setVisible(true);
     }
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {
@@ -149,10 +206,7 @@ public class sesionConHuella extends javax.swing.JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         System.out.println("Ha levantado el dedo del lector");
-                        //Opcion 1: pasar esto con try y catch
 
-                        //Opcion 2: Lo mismo pero sin try y catch:V
-                        //identificarHuella();
                     }
                 });
             }
@@ -182,16 +236,16 @@ public class sesionConHuella extends javax.swing.JFrame {
         //identificarHuella();
         if (featuresinscripcion != null) {
             try {
-                System.out.println("Las Caracteristicas de la Huella han sido creada");
+                System.out.println("Ya se puede usar la huella");
                 Reclutador.addFeatures(featuresinscripcion);
-                Image image = CrearImagenHuella(sample);
-                DibujarHuella(image);
                 identificarHuella();
                 Reclutador.clear();
             } catch (DPFPImageQualityException ex) {
                 System.err.println("Error: " + ex.getMessage());
             } catch (IOException ex) {
-            } 
+                Logger.getLogger(sesionConHuella.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
 
     }
@@ -207,12 +261,6 @@ public class sesionConHuella extends javax.swing.JFrame {
 
     public Image CrearImagenHuella(DPFPSample sample) {
         return DPFPGlobal.getSampleConversionFactory().createImage(sample);
-    }
-
-    public void DibujarHuella(Image image) {
-        lblImagenHuella.setIcon(new ImageIcon(
-                image.getScaledInstance(lblImagenHuella.getWidth(), lblImagenHuella.getHeight(), Image.SCALE_DEFAULT)));
-        repaint();
     }
 
     public DPFPTemplate getTemplate() {
@@ -259,10 +307,10 @@ public class sesionConHuella extends javax.swing.JFrame {
                     //spAsistencia(in idP int)
                     personaInt[0] = idPersona;
                     personaInt[1] = idTipoPer;
-                    if(idPersona>0){
-                        switch(idTipoPer){
+                    if (idPersona > 0) {
+                        switch (idTipoPer) {
                             case 1:
-                                
+
                                 vistaUsuarios.inicio nuevo = new vistaUsuarios.inicio();
                                 this.dispose();
                                 nuevo.crearComponentes(true);
@@ -280,22 +328,20 @@ public class sesionConHuella extends javax.swing.JFrame {
                                 this.dispose();
                                 log.crearComponentes(true);
                         }
-                    }else{
+                    } else {
                         this.dispose();
                         stop();
                         JOptionPane.showMessageDialog(this, "No se encontro la huella", "Error", JOptionPane.ERROR_MESSAGE);
                         log.crearComponentes(true);
                     }
-        
-                    while(rs.next()){
+
+                    while (rs.next()) {
                         System.out.println(rs.getString("msj"));
                     }
                     stop();
                     this.dispose();
                     return;
-                } 
-                    
-                
+                }
 
             }
             JOptionPane.showMessageDialog(null, "No existe ningún registro que coincida con la huella", "Verificacion de Huella", JOptionPane.ERROR_MESSAGE);
@@ -304,14 +350,34 @@ public class sesionConHuella extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.err.println("Error al identificar huella dactilar." + e.getMessage());
         } finally {
-            
+
         }
     }
-    public int[] getIDS(){
+
+    public int[] getIDS() {
         return personaInt;
     }
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblImagenHuella;
-    private javax.swing.JPanel panHuellas;
+    //Quitale el hilo si no lo estas probando solo >:v
+    Date date = new Date();
+    Font titulop, tit;
+    Font titulopb, titb;
+    Font subtitulos;
+    Color azul;
+    Color azulAcento;
+    Color blanco;
+    Color verde;
+    Color rojo;
+    JLabel titulo, tituloBold, subtitulo;
+    JLabel titulo2, tituloBold2, subtituloEntradaOk, imagenEntradaOk;
+    JLabel subtituloSalidaOk, imagenSalidaOk;
+    JLabel subtituloEntrada, imagenEntrada;
+    JLabel subtituloSalida, imagenSalida;
+    JPanel arriba, abajo;
+    JTextField usuario;
+    JPasswordField contrasena;
+    JSeparator lineaUsr, lineaCont;
+    JButton alumnos, grupos, profesor, modificacion, configuracion, cerrar;
+    JPanel defauult, permitirEntrada, permitirSalida, denegarEntrada, denegarSalida;
+    
 
 }

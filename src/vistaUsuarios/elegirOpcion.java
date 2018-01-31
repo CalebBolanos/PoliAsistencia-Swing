@@ -93,8 +93,8 @@ public class elegirOpcion implements ActionListener, MouseListener {
          */
 
         ImageIcon iconRegular = new ImageIcon(new ImageIcon(getClass().getResource("/img/regular.png")).getImage());
-        adentro = new JButton("<html>Alumno dentro <br>de Reglamento</html>", iconRegular);
-        adentro.setBounds(180, 150, 380, 150);
+        adentro = new JButton("<html>Alumno</html>", iconRegular);
+        adentro.setBounds(450, 150, 380, 150);
         adentro.setBackground(blanco);
         adentro.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         adentro.setFont(new java.awt.Font("Arial", 0, 25));
@@ -104,17 +104,17 @@ public class elegirOpcion implements ActionListener, MouseListener {
         adentro.addActionListener(this);
         ventana.add(adentro);
 
-        ImageIcon iconIrregular = new ImageIcon(new ImageIcon(getClass().getResource("/img/irregular.png")).getImage());
-        afuera = new JButton("<html><center>Alumno fuera <br>de Reglamento</center></html>", iconIrregular);
-        afuera.setBounds(710, 150, 380, 150);
-        afuera.setBackground(blanco);
-        afuera.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
-        afuera.setFont(new java.awt.Font("Arial", 0, 25));
-        afuera.setForeground(azulAcento);
-        afuera.setFocusPainted(false);
-        afuera.addMouseListener(this);
-        afuera.addActionListener(this);
-        ventana.add(afuera);
+//        ImageIcon iconIrregular = new ImageIcon(new ImageIcon(getClass().getResource("/img/irregular.png")).getImage());
+//        afuera = new JButton("<html><center>Alumno fuera <br>de Reglamento</center></html>", iconIrregular);
+//        afuera.setBounds(710, 150, 380, 150);
+//        afuera.setBackground(blanco);
+//        afuera.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+//        afuera.setFont(new java.awt.Font("Arial", 0, 25));
+//        afuera.setForeground(azulAcento);
+//        afuera.setFocusPainted(false);
+//        afuera.addMouseListener(this);
+//        afuera.addActionListener(this);
+//        ventana.add(afuera);
         
         ImageIcon iconGrupo = new ImageIcon(new ImageIcon(getClass().getResource("/img/grupos.png")).getImage());
         grupo = new JButton("<html><center>Consulta de Grupos</center></html>", iconGrupo);
@@ -145,7 +145,7 @@ public class elegirOpcion implements ActionListener, MouseListener {
             abrir.crearComponentes(true);
         }
         if(a.getSource() == adentro){
-            inscribirAlumnosMenu abrir = new inscribirAlumnosMenu();
+            alumnoRegular abrir = new alumnoRegular();
             abrir.crearComponentes(true);
         }
         if(a.getSource() == afuera){
