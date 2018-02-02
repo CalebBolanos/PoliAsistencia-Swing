@@ -34,6 +34,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import controlador.baseDeDatos;
+import controlador.sesion;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -68,11 +69,10 @@ public class Guarda21 extends javax.swing.JFrame {
     private javax.swing.JLabel lblImagenHuella;
     private javax.swing.JPanel panBtns;
     private javax.swing.JPanel panHuellas;
-    private static int GEN, retID, TIPO;
+    private static int GEN, retID, TIPO, idPer;
     private static String NOM, PAT, MAT, FECH, BOL, MSJ;
 
     public Guarda21() {
-
         setTitle("Entrada/Salida");
         setBounds(30, 30, 1300, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,6 +81,8 @@ public class Guarda21 extends javax.swing.JFrame {
         setResizable(false);
         setLayout(null);
         initComponents();
+        sesion ses = new sesion();
+        idPer = ses.getID();
     }
 
     public Guarda21(int tip, int gen, String nom, String pat, String mat, String fech, String bol) {
@@ -382,20 +384,29 @@ public class Guarda21 extends javax.swing.JFrame {
 //     stop();
         ByteArrayInputStream datosHuella = new ByteArrayInputStream(template.serialize());
         Integer tamanoHuella = template.serialize().length;
+        boolean pasar = BOL !=null;
         int id = 0;
         try {
             baseDeDatos bd = new baseDeDatos();
             bd.conectar();
             //spGuardaDocente(in idT int,in g int, in pat nvarchar(250),in mat nvarchar(250), in nom nvarchar(250),
             //in fech date, in mail nvarchar(250),in numT nvarchar(15),in hu longblob)
-            ResultSet rs = bd.ejecuta("call spGuardaDocente(" + TIPO + ", " + GEN + ", '" + PAT + "', '" + MAT
+            if(pasar){
+                ResultSet rs = bd.ejecuta("call spGuardaDocente(" + TIPO + ", " + GEN + ", '" + PAT + "', '" + MAT
                     + "', '" + NOM + "', '" + FECH + "', 'sinasignar@gmail.com', '" + BOL + "');");
-            while (rs.next()) {
-                id = rs.getInt("idP");
-                MSJ = rs.getString("msj");
+                while (rs.next()) {
+                    id = rs.getInt("idP");
+                    MSJ = rs.getString("msj");
+                }
+                System.out.println("IDP: " + id);
+                retID = id;
             }
-            System.out.println("IDP: " + id);
-            retID = id;
+            else {
+                id=idPer;
+                retID = id;
+            }
+            
+            
             if (id > 0) {
                 Connection c = bd.getConexion();
                 //create function fGuardaHuella(idP int, hu longblob) returns nvarchar(100)
@@ -406,15 +417,6 @@ public class Guarda21 extends javax.swing.JFrame {
                     guardarStmt.setBinaryStream(2, datosHuella, tamanoHuella);
                     guardarStmt.execute();
                     guardarStmt.close();
-                    char ho[] = new char[tamanoHuella];
-                    byte bb[] = new byte[tamanoHuella];
-                    datosHuella.read(bb, 0, tamanoHuella);
-                    //Este es de prueba
-                    for (int i = 0; i < tamanoHuella; i++) {
-                        ho[i] = (char) bb[i];
-                    }
-                    String houy = new String(ho);
-                    System.out.println("RESGISTROS 2: " + houy);
                 }
             }
             System.out.println("Huella Guarda");
@@ -423,6 +425,28 @@ public class Guarda21 extends javax.swing.JFrame {
             System.out.println(e.getMessage());
             MSJ = e.getMessage();
         }
+    }
+    
+    public void guardaHuella2(){
+        ByteArrayInputStream datosHuella = new ByteArrayInputStream(template.serialize());
+        Integer tamanoHuella = template.serialize().length;
+        baseDeDatos bd = new baseDeDatos();
+        try{
+            bd.conectar();
+            Connection c = bd.getConexion();
+            //create function fGuardaHuella(idP int, hu longblob) returns nvarchar(100)
+            try (PreparedStatement guardarStmt = c.prepareStatement("call fGuardaHuella(?,?)")) {
+                //create function fGuardaHuella(idP int, hu longblob) returns nvarchar(100)
+                guardarStmt.setInt(1, idPer);
+                //Este si lo debes usar porque asi se guarda la huella, en la base esta como tipo BLOB
+                guardarStmt.setBinaryStream(2, datosHuella, tamanoHuella);
+                guardarStmt.execute();
+                guardarStmt.close();
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
     }
 
     public int getID() {

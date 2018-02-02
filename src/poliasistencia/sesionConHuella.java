@@ -34,6 +34,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import controlador.baseDeDatos;
+import controlador.sesion;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -308,15 +309,17 @@ public class sesionConHuella extends javax.swing.JFrame {
                     personaInt[0] = idPersona;
                     personaInt[1] = idTipoPer;
                     if (idPersona > 0) {
+                        sesion ses;
                         switch (idTipoPer) {
                             case 1:
-
+                                ses = new sesion(idPersona, 1);
                                 vistaUsuarios.inicio nuevo = new vistaUsuarios.inicio();
                                 this.dispose();
                                 nuevo.crearComponentes(true);
                                 stop();
                                 break;
                             case 4:
+                                ses = new sesion(idPersona, 4);
                                 vistaGrupos.inicio nuevo2 = new vistaGrupos.inicio();
                                 this.dispose();
                                 nuevo2.crearComponentes(true);

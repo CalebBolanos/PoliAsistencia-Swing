@@ -324,7 +324,7 @@ public class registroProfesores implements ActionListener {
                                                     JOptionPane.showMessageDialog(ventana, "Profesor registrado");
                                                 }
                                                 else{
-                                                    JOptionPane.showMessageDialog(ventana, g2.getMsj(), "Error", JOptionPane.ERROR_MESSAGE);
+                                                    //JOptionPane.showMessageDialog(ventana, g2.getMsj(), "Error", JOptionPane.ERROR_MESSAGE);
                                                 }
                                             }
                                             else{
@@ -345,7 +345,7 @@ public class registroProfesores implements ActionListener {
                                                 paterno.setText("");
                                                 JOptionPane.showMessageDialog(ventana, "Alumno registrado");
                                             }else{
-                                                JOptionPane.showMessageDialog(ventana, g2.getMsj(), "Error", JOptionPane.ERROR_MESSAGE);
+                                                //JOptionPane.showMessageDialog(ventana, g2.getMsj(), "Error", JOptionPane.ERROR_MESSAGE);
                                             }
                                         }
                                     }

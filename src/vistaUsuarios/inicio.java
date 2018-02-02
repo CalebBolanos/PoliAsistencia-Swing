@@ -5,6 +5,7 @@
  */
 package vistaUsuarios;
 
+import controlador.sesion;
 import poliasistencia.login;
 import java.awt.Color;
 import java.awt.Font;
@@ -18,10 +19,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import poliasistencia.Guarda21;
 
 /**
  *
@@ -142,6 +145,18 @@ public class inicio implements ActionListener, MouseListener {
         ventana.add(abajo);
 
         ventana.setVisible(permiso);
+        
+        sesion ses = new sesion();
+        if(!ses.checaHuella()){
+            int evaluar = JOptionPane.showConfirmDialog(ventana, "Usted no tiene una huella para iniciar sesion ¿desea"
+                    + " registrar su huella para iniciar sesion con ella?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(evaluar == 0){
+                Guarda21 g21 = new Guarda21();
+                g21.setVisible(true);
+            }else{
+                System.out.println("No");
+            }
+        }
     }
 
     @Override

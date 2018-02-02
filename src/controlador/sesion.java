@@ -15,6 +15,14 @@ import java.sql.SQLException;
 public class sesion {
     private static int idSesion, tipo;
     private static String numT, cont;
+    
+    public sesion(){
+        
+    }
+    public sesion(int idSes, int idT){
+        this.idSesion = idSes;
+        this.tipo = idT;
+    }
     public int getID(){
         return idSesion;
     }
@@ -48,6 +56,20 @@ public class sesion {
         idSesion = id[0];
         tipo = id[1];
         return id;
+    }
+    
+    public boolean checaHuella(){
+        boolean ret = false;
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spPersonaConHuella(" + idSesion + ");");
+            while(rs.next())
+                ret = rs.getInt("ret")>0;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ret;
     }
     
 }
