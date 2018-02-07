@@ -64,14 +64,13 @@ public class editarUnidad implements ActionListener, MouseListener {
     JCheckBox lunes, martes, miercoles, jueves, viernes;
     ButtonGroup turno;
     JRadioButton matutino, vespertino;
-    String id = "";
     JScrollPane scrollpane;
     JSeparator linea;
-    
+    int semesD, unidD, inL, fL, inMa, fMa, inMi, fMi, inJ, fJ, inV, fV;
+    boolean sL, sMa, sMi, sJ, sV;
+    String nombreUn;
 
-    public editarUnidad(String id) {
-        this.id = id;
-        System.out.println(id);
+    public editarUnidad(String datos[]) {
         ventana = new JFrame("Editar Unidad - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,6 +78,9 @@ public class editarUnidad implements ActionListener, MouseListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        nombreUn = datos[0];
+        semesD = Integer.parseInt(datos[1]);
+        
     }
 
     public void crearComponentes(boolean permiso) {
@@ -548,8 +550,6 @@ public class editarUnidad implements ActionListener, MouseListener {
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            verUnidades abrir = new verUnidades(id);
-            abrir.crearComponentes(true);
         }
         
         if (a.getSource() == guardar) {
@@ -566,8 +566,6 @@ public class editarUnidad implements ActionListener, MouseListener {
         if(a.getSource() == agreg){
             JOptionPane.showMessageDialog(ventana, "Unidad de aprendizaje agregada correctamente");
             ventana.dispose();
-            verUnidades abrir = new verUnidades(id);
-            abrir.crearComponentes(true);
             
         }
             
