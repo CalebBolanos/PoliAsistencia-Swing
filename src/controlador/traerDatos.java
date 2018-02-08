@@ -726,4 +726,33 @@ public class traerDatos {
         }
         return ret;
     }
+    
+    public String[] horarioUnidad(String idUnid){
+        String ret[] = new String[14];
+        String genero="";
+        baseDeDatos bd = new baseDeDatos();
+        try{
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spTraerDatosUnidad('" + idUnid +"');");
+            int dia;
+            while(rs.next()){
+                ret[0] = rs.getString("idUnidad");
+                dia = rs.getInt("idDia");
+                ret[dia] = rs.getString("idHorarioI");
+                ret[dia+5] = rs.getString("idHorarioF");
+                ret[11] = rs.getString("materia");
+                ret[12] = rs.getString("semestre");
+                ret[13] = rs.getString("cupo");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        for(int i = 0; i<14; i++){
+            if(ret[i] == null){
+                ret[i]="0";
+            }
+        }
+        return ret;
+    }
 }
