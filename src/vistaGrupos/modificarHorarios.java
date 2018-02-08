@@ -204,7 +204,7 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getSelectedRow() == i) {
                 ventana.dispose();
-                traerDatos td = traerDatos();
+            traerDatos td = traerDatos();
                 editarUnidad abrir;
                 abrir = new editarUnidad(td.horarioUnidad((String)tabla.getValueAt(i, 0)));
                 abrir.crearComponentes(true);
