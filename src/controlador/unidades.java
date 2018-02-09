@@ -153,4 +153,20 @@ public class unidades {
         return ret;
     }
     
+    public String quitaHorario(int idUnidad){
+        String ret="NO";
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spBorraHorario(" + idUnidad + ", 'POL'  );");
+            while(rs.next()){
+                ret= rs.getString("msj");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            this.msj = e.getMessage();
+        }
+        return ret;
+    }
+    
 }

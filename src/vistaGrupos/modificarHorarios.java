@@ -5,6 +5,7 @@
  */
 package vistaGrupos;
 
+import controlador.traerDatos;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -64,21 +65,19 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
     DefaultTableModel modelo;
     JTable tabla;
     JScrollPane scrollpane;
-    String[] columnNames = { "Semestre", "Unidad de Aprendizaje", "Turno", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "ID"};
-    Object[][] datos
-            = {
-                {"5", "Física III", "Matutino", "No", "Sí", "No", "Sí", "Sí", "1"},
-                {"3", "Física I", "Vespertino", "Sí", "Sí", "Sí", "No", "No", "1"},};
-    
+    String[] columnNames = { "Unidad de Aprendizaje", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes","Grupo", "ID"};
+    Object[][] datos;
 
     public modificarHorarios() {
-        ventana = new JFrame("Consulta de Unidades de Aprendizaje - PoliAsistencia");
+        ventana = new JFrame("Modificación de horarios de unidades de aprendizaje - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image icono = new ImageIcon(getClass().getResource("/img/poliAsistencia.png")).getImage();
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        traerDatos td = new traerDatos();
+        datos = td.unidadesHorario();
     }
 
     public void crearComponentes(boolean permiso) {
@@ -94,7 +93,7 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Profesor");
+        titulo = new JLabel("Modificación de horario");
         titulo.setBounds(540, 5, 700, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
@@ -122,24 +121,13 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
          b2.setVerticalTextPosition(AbstractButton.BOTTOM);
          b2.setHorizontalTextPosition(AbstractButton.CENTER);
          */
-        sub = new JLabel("Para agregar una Unidad de Aprendizaje, debe de llenar el siguiente formulario");
+        sub = new JLabel("Para modificar horario de click en la unidad deseada");
         sub.setBounds(80, 110, 900, 40);
         sub.setFont(subtitulos);
         sub.setForeground(azulAcento);
-        ventana.add(sub);
+        ventana.add(sub);      
         
-        agreg = new JButton("Agregar Unidad");
-        agreg.setBounds(990, 110, 200, 40);
-        agreg.setBackground(blanco);
-        agreg.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-        agreg.setFont(new java.awt.Font("Arial", 0, 17));
-        agreg.setForeground(Color.GREEN);
-        agreg.setFocusPainted(false);
-        agreg.addActionListener(this);
-        ventana.add(agreg);
-        
-        
-        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades de aprendizaje del Profesor</html>");
+        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades de aprendizaje</html>");
         sub.setBounds(50, 160, 1200, 40);
         sub.setFont(subtitulos);
         sub.setForeground(blanco);
@@ -147,16 +135,16 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         sub.setOpaque(true);
         ventana.add(sub);
         
-        sub = new JLabel("Filtrar con Semestre");
-        sub.setBounds(50, 200, 1200, 30);
-        sub.setFont(titulopb);
-        sub.setOpaque(true);
-        ventana.add(sub);
-        
-        buscador = new JTextField();
-        buscador.setBounds(215, 205, 1000, 20);
-        buscador.addKeyListener(this);
-        ventana.add(buscador);
+//        sub = new JLabel("Filtrar ");
+//        sub.setBounds(50, 200, 1200, 30);
+//        sub.setFont(titulopb);
+//        sub.setOpaque(true);
+//        ventana.add(sub);
+//        
+//        buscador = new JTextField();
+//        buscador.setBounds(215, 205, 1000, 20);
+//        buscador.addKeyListener(this);
+//        ventana.add(buscador);
         
         modelo = new DefaultTableModel(datos, columnNames);
         tabla = new JTable(modelo);
@@ -167,11 +155,11 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         scrollpane.setBounds(50, 230, 1200, 340);
         ventana.add(scrollpane);
         
-        sub = new JLabel("Da clic en una unidad de aprendizaje para editar o consultar su información");
-        sub.setBounds(240, 573, 1000, 40);
-        sub.setFont(subtitulos);
-        sub.setForeground(Color.gray);
-        ventana.add(sub);
+//        sub = new JLabel("Da clic en una unidad de aprendizaje para editar o consultar su información");
+//        sub.setBounds(240, 573, 1000, 40);
+//        sub.setFont(subtitulos);
+//        sub.setForeground(Color.gray);
+//        ventana.add(sub);
 
         abajo = new JPanel();
         abajo.setBounds(0, 100, 1300, 570);
@@ -215,7 +203,9 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getSelectedRow() == i) {
                 ventana.dispose();
-                editarUnidad abrir = new editarUnidad((String)tabla.getValueAt(i, 0));
+                traerDatos td = new traerDatos();
+                agregarUnidad abrir;
+                abrir = new agregarUnidad(td.horarioUnidad((String)tabla.getValueAt(i, 7)));
                 abrir.crearComponentes(true);
             }
         }

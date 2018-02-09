@@ -64,14 +64,14 @@ public class editarUnidad implements ActionListener, MouseListener {
     JCheckBox lunes, martes, miercoles, jueves, viernes;
     ButtonGroup turno;
     JRadioButton matutino, vespertino;
-    String id = "";
     JScrollPane scrollpane;
     JSeparator linea;
+    int semesD, unidD, inL, fL, inMa, fMa, inMi, fMi, inJ, fJ, inV, fV, cupo, uni;
+    boolean sL, sMa, sMi, sJ, sV;
+    String nombreUn;
     
 
-    public editarUnidad(String id) {
-        this.id = id;
-        System.out.println(id);
+    public editarUnidad(String datos[]) {
         ventana = new JFrame("Editar Unidad - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,10 +79,31 @@ public class editarUnidad implements ActionListener, MouseListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        unidD = Integer.parseInt(datos[0]);
+        inL = Integer.parseInt(datos[1]);
+        inMa = Integer.parseInt(datos[2]);
+        inMi = Integer.parseInt(datos[3]);
+        inJ = Integer.parseInt(datos[4]);
+        inV = Integer.parseInt(datos[5]);
+        fL = Integer.parseInt(datos[6]);
+        fMa = Integer.parseInt(datos[7]);
+        fMi = Integer.parseInt(datos[8]);
+        fJ = Integer.parseInt(datos[9]);
+        fV = Integer.parseInt(datos[10]);
+        nombreUn = datos[11];
+        semesD = Integer.parseInt(datos[12]);
+        cupo = Integer.parseInt(datos[13]);
+        uni = Integer.parseInt(datos[14]);
+        sL = inL>0;
+        sMa = inMa>0;
+        sMi = inMi>0;
+        sJ = inJ>0;
+        sV = inV>0;
     }
 
     public void crearComponentes(boolean permiso) {
-        
+        String horas[] = {"Seleccione una hora", "7:00", "8:00", "9:00", "10:00", "11:00",
+        "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"};
         blanco = new Color(255, 255, 255);
         azulAcento = new Color(0, 145, 234);
         azul = new Color(0, 176, 255);
@@ -91,7 +112,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Profesor");
+        titulo = new JLabel(nombreUn);
         titulo.setBounds(540, 5, 700, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
@@ -162,6 +183,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         semestre.setFont(titulopb);
         semestre.addActionListener(this);
         abajo.add(semestre);
+        semestre.setSelectedIndex(semesD);
         
         //50
         
@@ -180,6 +202,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         unidad.setFont(titulopb);
         unidad.addActionListener(this);
         abajo.add(unidad);
+        unidad.setSelectedItem(nombreUn);
         
         //50
         
@@ -194,30 +217,35 @@ public class editarUnidad implements ActionListener, MouseListener {
         lunes.setFont(titulopb);
         lunes.setBackground(blanco);
         abajo.add(lunes);
+        lunes.setSelected(sL);
         
         martes = new JCheckBox("Martes");
         martes.setBounds(470, 220, 90, 50);
         martes.setFont(titulopb);
         martes.setBackground(blanco);
         abajo.add(martes);
+        martes.setSelected(sMa);
         
         miercoles = new JCheckBox("Miercoles");
         miercoles.setBounds(560, 220, 120, 50);
         miercoles.setFont(titulopb);
         miercoles.setBackground(blanco);
         abajo.add(miercoles);
+        miercoles.setSelected(sMi);
         
         jueves = new JCheckBox("Jueves");
         jueves.setBounds(680, 220, 90, 50);
         jueves.setFont(titulopb);
         jueves.setBackground(blanco);
         abajo.add(jueves);
+        jueves.setSelected(sJ);
         
         viernes = new JCheckBox("Viernes");
         viernes.setBounds(770, 220, 90, 50);
         viernes.setFont(titulopb);
         viernes.setBackground(blanco);
         abajo.add(viernes);
+        viernes.setSelected(sV);
         
         //50
         descripcion = new JLabel("Turno");
@@ -252,7 +280,6 @@ public class editarUnidad implements ActionListener, MouseListener {
         lun.setBounds(300, 370, 700, 100);
         
         
-        
         //new java.awt.Font("Arial", 1, 17)
         
           
@@ -261,11 +288,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(200, 20, 300, 100);
         lun.add(descripcion);
         
-        inicioLunes = new JComboBox();
-        inicioLunes.addItem("Seleccione una opción");
-        inicioLunes.addItem("7:00");
-        inicioLunes.addItem("8:00");
-        inicioLunes.addItem("9:00");
+        inicioLunes = new JComboBox(horas);
         inicioLunes.setBounds(230, 55, 100, 30);
         inicioLunes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         inicioLunes.setBackground(blanco);
@@ -279,11 +302,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(340, 20, 300, 100);
         lun.add(descripcion);
         
-        finLunes = new JComboBox();
-        finLunes.addItem("Seleccione una opción");
-        finLunes.addItem("7:00");
-        finLunes.addItem("8:00");
-        finLunes.addItem("9:00");
+        finLunes = new JComboBox(horas);
         finLunes.setBounds(360, 55, 100, 30);
         finLunes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         finLunes.setBackground(blanco);
@@ -319,11 +338,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(200, 20, 300, 100);
         mar.add(descripcion);
         
-        inicioMartes = new JComboBox();
-        inicioMartes.addItem("Seleccione una opción");
-        inicioMartes.addItem("7:00");
-        inicioMartes.addItem("8:00");
-        inicioMartes.addItem("9:00");
+        inicioMartes = new JComboBox(horas);
         inicioMartes.setBounds(230, 55, 100, 30);
         inicioMartes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         inicioMartes.setBackground(blanco);
@@ -338,10 +353,6 @@ public class editarUnidad implements ActionListener, MouseListener {
         mar.add(descripcion);
         
         finMartes = new JComboBox();
-        finMartes.addItem("Seleccione una opción");
-        finMartes.addItem("7:00");
-        finMartes.addItem("8:00");
-        finMartes.addItem("9:00");
         finMartes.setBounds(360, 55, 100, 30);
         finMartes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         finMartes.setBackground(blanco);
@@ -376,11 +387,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(200, 20, 300, 100);
         mie.add(descripcion);
         
-        iniciomiercoles = new JComboBox();
-        iniciomiercoles.addItem("Seleccione una opción");
-        iniciomiercoles.addItem("7:00");
-        iniciomiercoles.addItem("8:00");
-        iniciomiercoles.addItem("9:00");
+        iniciomiercoles = new JComboBox(horas);
         iniciomiercoles.setBounds(230, 55, 100, 30);
         iniciomiercoles.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         iniciomiercoles.setBackground(blanco);
@@ -394,10 +401,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(340, 20, 300, 100);
         mie.add(descripcion);
         
-        finMiercoles = new JComboBox();
-        finMiercoles.addItem("Seleccione una opción");
-        finMiercoles.addItem("7:00");
-        finMiercoles.addItem("8:00");
+        finMiercoles = new JComboBox(horas);
         finMiercoles.addItem("9:00");
         finMiercoles.setBounds(360, 55, 100, 30);
         finMiercoles.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
@@ -433,10 +437,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(200, 20, 300, 100);
         jue.add(descripcion);
         
-        inicioJueves = new JComboBox();
-        inicioJueves.addItem("Seleccione una opción");
-        inicioJueves.addItem("7:00");
-        inicioJueves.addItem("8:00");
+        inicioJueves = new JComboBox(horas);
         inicioJueves.addItem("9:00");
         inicioJueves.setBounds(230, 55, 100, 30);
         inicioJueves.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
@@ -451,11 +452,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(340, 20, 300, 100);
         jue.add(descripcion);
         
-        finJueves = new JComboBox();
-        finJueves.addItem("Seleccione una opción");
-        finJueves.addItem("7:00");
-        finJueves.addItem("8:00");
-        finJueves.addItem("9:00");
+        finJueves = new JComboBox(horas);
         finJueves.setBounds(360, 55, 100, 30);
         finJueves.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         finJueves.setBackground(blanco);
@@ -490,11 +487,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(200, 20, 300, 100);
         vie.add(descripcion);
         
-        inicioViernes = new JComboBox();
-        inicioViernes.addItem("Seleccione una opción");
-        inicioViernes.addItem("7:00");
-        inicioViernes.addItem("8:00");
-        inicioViernes.addItem("9:00");
+        inicioViernes = new JComboBox(horas);
         inicioViernes.setBounds(230, 55, 100, 30);
         inicioViernes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         inicioViernes.setBackground(blanco);
@@ -508,11 +501,7 @@ public class editarUnidad implements ActionListener, MouseListener {
         descripcion.setBounds(340, 20, 300, 100);
         vie.add(descripcion);
         
-        finViernes = new JComboBox();
-        finViernes.addItem("Seleccione una opción");
-        finViernes.addItem("7:00");
-        finViernes.addItem("8:00");
-        finViernes.addItem("9:00");
+        finViernes = new JComboBox(horas);
         finViernes.setBounds(360, 55, 100, 30);
         finViernes.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         finViernes.setBackground(blanco);
@@ -525,19 +514,21 @@ public class editarUnidad implements ActionListener, MouseListener {
         
         
         
-        
-        
-        
-        turno.add(matutino);
-        turno.add(vespertino);
-        
-        
         scrollpane = new JScrollPane(abajo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollpane.setBounds(0, 100, 1295, 523);
         scrollpane.getVerticalScrollBar().setUnitIncrement(16);
         ventana.add(scrollpane);
         
-        
+        inicioLunes.setSelectedIndex(inL);
+        inicioMartes.setSelectedIndex(inMa);
+        iniciomiercoles.setSelectedIndex(inMi);
+        inicioJueves.setSelectedIndex(inJ);
+        inicioViernes.setSelectedIndex(inV);
+        finLunes.setSelectedIndex(fL);
+        finMartes.setSelectedIndex(fMa);
+        finMiercoles.setSelectedIndex(fMi);
+        finJueves.setSelectedIndex(fJ);
+        finViernes.setSelectedIndex(fV);
 
         ventana.setVisible(permiso);
 
@@ -548,8 +539,6 @@ public class editarUnidad implements ActionListener, MouseListener {
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            verUnidades abrir = new verUnidades(id);
-            abrir.crearComponentes(true);
         }
         
         if (a.getSource() == guardar) {
@@ -566,8 +555,6 @@ public class editarUnidad implements ActionListener, MouseListener {
         if(a.getSource() == agreg){
             JOptionPane.showMessageDialog(ventana, "Unidad de aprendizaje agregada correctamente");
             ventana.dispose();
-            verUnidades abrir = new verUnidades(id);
-            abrir.crearComponentes(true);
             
         }
             

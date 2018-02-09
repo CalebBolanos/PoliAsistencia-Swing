@@ -5,6 +5,7 @@
  */
 package vistaUsuarios;
 
+import controlador.traerDatos;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -56,10 +57,7 @@ public class infoGrupos implements ActionListener, KeyListener {
     DefaultTableModel modelo;
     Object[] agregar = {confirm, contrasenaConfirmacion};
     String[] columnNames = { "Boleta", "Nombre", "Apellido Paterno", "Apellido Materno", "Genero"};
-    Object[][] datos
-            = {
-                {"2016090069", "Caleb Salomón", "Bolaños", "Ramos", "Masculino"},
-                {"PM12345678", "Obed", "Islas", "Ortigoza", "Masculino"},};
+    Object[][] datos;
 
     public infoGrupos(String id) {
         this.id = id;
@@ -71,6 +69,8 @@ public class infoGrupos implements ActionListener, KeyListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        traerDatos td = new traerDatos();
+        datos = td.AlumnosEnElGrupo(id);
     }
 
     public void crearComponentes(boolean permiso) {

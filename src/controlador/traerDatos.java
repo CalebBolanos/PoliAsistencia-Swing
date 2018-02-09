@@ -323,6 +323,16 @@ public class traerDatos {
                     int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
                     String horario = horas[horIn] + " - " + horas[horaF];
                     dato[dia] = horario;
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[0] = rs.getString("materia");
+                        dato[6] = rs.getString("grupo");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
                 }else{
                     if(contador==1){
                         dato[7] = idUnidad+"";
@@ -723,6 +733,35 @@ public class traerDatos {
         for (int i = 0; i < tamanio; i++) {
             ret[0][i] = arr1.get(i);
             ret[1][i] = arr2.get(i);
+        }
+        return ret;
+    }
+    
+    public String[] horarioUnidad(String idUnid){
+        String ret[] = new String[15];
+        baseDeDatos bd = new baseDeDatos();
+        try{
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spTraerDatosUnidad('" + idUnid +"');");
+            int dia;
+            while(rs.next()){
+                ret[0] = rs.getString("idUnidad");
+                dia = rs.getInt("idDia");
+                ret[dia] = rs.getString("idHorarioI");
+                ret[dia+5] = rs.getString("idHorarioF");
+                ret[11] = rs.getString("materia");
+                ret[12] = rs.getString("semestre");
+                ret[13] = rs.getString("cupo");
+                ret[14] = rs.getString("idMateria");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        for(int i = 0; i<14; i++){
+            if(ret[i] == null){
+                ret[i]="0";
+            }
         }
         return ret;
     }

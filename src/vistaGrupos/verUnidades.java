@@ -217,8 +217,8 @@ public class verUnidades implements ActionListener, MouseListener, KeyListener {
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getSelectedRow() == i) {
                 ventana.dispose();
-                editarUnidad abrir = new editarUnidad((String)tabla.getValueAt(i, 0));
-                abrir.crearComponentes(true);
+//                editarUnidad abrir = new editarUnidad((String)tabla.getValueAt(i, 0));
+//                abrir.crearComponentes(true);
             }
         }
     }

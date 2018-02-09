@@ -165,6 +165,8 @@ public class inicio implements ActionListener, MouseListener {
         abajo.setBounds(0, 100, 1300, 550);
         abajo.setBackground(blanco);
         ventana.add(abajo);
+        
+        ventana.setVisible(permiso);
         sesion ses = new sesion();
         if(!ses.checaHuella()){
             int evaluar = JOptionPane.showConfirmDialog(ventana, "Usted no tiene una huella para iniciar sesion ¿desea"
@@ -176,7 +178,6 @@ public class inicio implements ActionListener, MouseListener {
                 System.out.println("No");
             }
         }
-        ventana.setVisible(permiso);
     }
 
     @Override

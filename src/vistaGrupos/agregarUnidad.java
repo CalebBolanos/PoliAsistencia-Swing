@@ -69,6 +69,9 @@ public class agregarUnidad implements ActionListener, MouseListener {
     String id = "";
     JScrollPane scrollpane;
     JSeparator linea;
+    int semesD, unidD, inL, fL, inMa, fMa, inMi, fMi, inJ, fJ, inV, fV, cupo, uni;
+    boolean sL, sMa, sMi, sJ, sV;
+    String nombreUn, cupoD, etBot;
 
     String horas[] = {"Seleccione una hora", "7:00", "8:00", "9:00", "10:00", "11:00",
         "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"};
@@ -81,6 +84,13 @@ public class agregarUnidad implements ActionListener, MouseListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        sL = false;
+        sMa = false;
+        sMi = false;
+        sJ = false;
+        sV = false;
+        nombreUn = "Unidades-Horario";
+        etBot = "Agregar unidad";
     }
 
     public agregarUnidad(String datos[]) {
@@ -91,6 +101,27 @@ public class agregarUnidad implements ActionListener, MouseListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        unidD = Integer.parseInt(datos[0]);
+        inL = Integer.parseInt(datos[1]);
+        inMa = Integer.parseInt(datos[2]);
+        inMi = Integer.parseInt(datos[3]);
+        inJ = Integer.parseInt(datos[4]);
+        inV = Integer.parseInt(datos[5]);
+        fL = Integer.parseInt(datos[6]);
+        fMa = Integer.parseInt(datos[7]);
+        fMi = Integer.parseInt(datos[8]);
+        fJ = Integer.parseInt(datos[9]);
+        fV = Integer.parseInt(datos[10]);
+        nombreUn = datos[11];
+        semesD = Integer.parseInt(datos[12]);
+        cupoD = datos[13];
+        uni = Integer.parseInt(datos[14]);
+        sL = inL>0;
+        sMa = inMa>0;
+        sMi = inMi>0;
+        sJ = inJ>0;
+        sV = inV>0;
+        etBot = "Modificar unidad";
     }
 
     public void crearComponentes(boolean permiso) {
@@ -103,7 +134,7 @@ public class agregarUnidad implements ActionListener, MouseListener {
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Unidades-Horario");
+        titulo = new JLabel(nombreUn);
         titulo.setBounds(340, 5, 700, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
@@ -120,7 +151,7 @@ public class agregarUnidad implements ActionListener, MouseListener {
         cerrar.addActionListener(this);
         ventana.add(cerrar);
 
-        agreg = new JButton("Agregar Unidad");
+        agreg = new JButton(etBot);
         agreg.setBounds(1070, 23, 200, 50);
         agreg.setBackground(azulAcento);
         agreg.setBorder(BorderFactory.createLineBorder(blanco, 2));
@@ -479,16 +510,48 @@ public class agregarUnidad implements ActionListener, MouseListener {
         finViernes.setEnabled(false);
         finViernes.addActionListener(this);
         vie.add(finViernes);
-
+        
         abajo.add(vie);
 
+        inicioLunes.setSelectedIndex(inL);
+        inicioMartes.setSelectedIndex(inMa);
+        iniciomiercoles.setSelectedIndex(inMi);
+        inicioJueves.setSelectedIndex(inJ);
+        inicioViernes.setSelectedIndex(inV);
+        finLunes.setSelectedIndex(fL);
+        finMartes.setSelectedIndex(fMa);
+        finMiercoles.setSelectedIndex(fMi);
+        finJueves.setSelectedIndex(fJ);
+        finViernes.setSelectedIndex(fV);
+        
+        lunes.setSelected(sL);
+        martes.setSelected(sMa);
+        miercoles.setSelected(sMi);
+        jueves.setSelected(sJ);
+        viernes.setSelected(sV);
+        
+        inicioLunes.setEnabled(sL);
+        inicioMartes.setEnabled(sMa);
+        iniciomiercoles.setEnabled(sMi);
+        inicioJueves.setEnabled(sJ);
+        inicioViernes.setEnabled(sV);
+        finLunes.setEnabled(sL);
+        finMartes.setEnabled(sMa);
+        finMiercoles.setEnabled(sMi);
+        finJueves.setEnabled(sJ);
+        finViernes.setEnabled(sV);
+        
+        semestre.setSelectedIndex(semesD);
+        unidad.setSelectedItem(nombreUn);
+        
         scrollpane = new JScrollPane(abajo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollpane.setBounds(0, 100, 1295, 523);
         scrollpane.getVerticalScrollBar().setUnitIncrement(16);
         ventana.add(scrollpane);
 
         ventana.setVisible(permiso);
-
+        
+        
     }
 
     @Override
@@ -613,7 +676,14 @@ public class agregarUnidad implements ActionListener, MouseListener {
             }
             if (seguir[0] && seguir[1] && seguir[2] && seguir[3] && seguir[4] && SeleccionadoF) {
                 unidades unid = new unidades();
-                int mat = unid.guardarUnidad(unidad.getSelectedItem() + "", 30);
+                if(unidD >0){
+                    int opc = JOptionPane.showConfirmDialog(ventana, "Si se modifica el horario, la relación entre la unidad, los profesores y "
+                            + "grupos desaparecera ¿Esta de acuerdo?", "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if(opc==0){
+                        unid.quitaHorario(unidD);
+                    }
+                }
+                int mat=unid.guardarUnidad(unidad.getSelectedItem() + "", 30);
                 int correcto[] = new int[5];
                 for (int i = 0; i < 5; i++) {
                     correcto[i] = 1;

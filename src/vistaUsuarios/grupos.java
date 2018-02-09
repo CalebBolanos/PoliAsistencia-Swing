@@ -5,6 +5,7 @@
  */
 package vistaUsuarios;
 
+import controlador.traerDatos;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -65,10 +66,7 @@ public class grupos implements ActionListener, MouseListener, KeyListener {
     JTable tabla;
     JScrollPane scrollpane;
     String[] columnNames = { "Grupo", "Semestre", "Turno", "Especialidad"};
-    Object[][] datos
-            = {
-                {"5IM7", "5", "Matutino", "Programación"},
-                {"1IV2", "1", "Vespertino", "Tronco Común"},};
+    Object[][] datos;
     
 
     public grupos() {
@@ -79,6 +77,8 @@ public class grupos implements ActionListener, MouseListener, KeyListener {
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        traerDatos td = new traerDatos();
+        datos = td.gruposConCupo();
     }
 
     public void crearComponentes(boolean permiso) {
