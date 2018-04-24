@@ -15,8 +15,10 @@ public class PoliAsistencia {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        login ventana = new login();
-        ventana.crearComponentes(true);
+        //login ventana = new login();
+        //ventana.crearComponentes(true);
+        Guarda21 g21 = new Guarda21();
+        g21.setVisible(true);
     }
     
 }

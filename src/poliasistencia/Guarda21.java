@@ -124,6 +124,7 @@ public class Guarda21 extends javax.swing.JFrame {
         titulop = new Font("Calibri", 0, 90);
         titb = new Font("Calibri", 1, 93);
         tit = new Font("Calibri", 0, 80);
+        puntos1 = new Font("Calibri", 0, 87);
 
         defauult = new JPanel();
         defauult.setLayout(null);
@@ -132,23 +133,104 @@ public class Guarda21 extends javax.swing.JFrame {
 
         //Titulos
         titulo = new JLabel("Poli");
-        titulo.setBounds(390, 240, 150, 100);
+        titulo.setBounds(390, 20, 150, 100);
         titulo.setFont(titulop);
         titulo.setForeground(azul);
         defauult.add(titulo);
 
         tituloBold = new JLabel("Asistencia");
-        tituloBold.setBounds(525, 237, 450, 100);
+        tituloBold.setBounds(525, 17, 450, 100);
         tituloBold.setFont(titulopb);
         tituloBold.setForeground(azulAcento);
         defauult.add(tituloBold);
 
-        subtitulo = new JLabel("Coloca el dedo en el sensor para registrar tu huella");
-        subtitulo.setIcon(new ImageIcon(getClass().getResource("/img/huella.png")));
+        subtitulo = new JLabel("Coloca el dedo que se indica en la imagen");
+        //subtitulo.setIcon(new ImageIcon(getClass().getResource("/img/huella.png")));
         subtitulo.setFont(subtitulos);
         subtitulo.setForeground(azulAcento);
-        subtitulo.setBounds(170, 350, 1000, 100);
+        subtitulo.setBounds(330, 80, 1000, 100);
         defauult.add(subtitulo);
+        
+        img11 = new JLabel("");
+        img11.setIcon(new ImageIcon(getClass().getResource("/img/manos.png")));
+        img11.setFont(subtitulos);
+        img11.setForeground(azulAcento);
+        img11.setBounds(400, 100, 600, 500);
+        defauult.add(img11);
+        
+        img1 = new JLabel("°");
+        img1.setFont(puntos1);
+        img1.setForeground(azulAcento);
+        img1.setBounds(643, 157, 600, 500);
+        defauult.add(img1);
+        
+        img2 = new JLabel("°");
+        img2.setFont(puntos1);
+        img2.setForeground(azulAcento);
+        img2.setBounds(583, 157, 600, 500);
+        defauult.add(img2);
+        
+        img3 = new JLabel("°");
+        img3.setFont(puntos1);
+        img3.setForeground(azulAcento);
+        img3.setBounds(527, 62, 600, 500);
+        defauult.add(img3);
+        
+        img4 = new JLabel("°");
+        img4.setFont(puntos1);
+        img4.setForeground(azulAcento);
+        img4.setBounds(703, 62, 600, 500);
+        defauult.add(img4);
+        
+        img5 = new JLabel("°");
+        img5.setFont(puntos1);
+        img5.setForeground(azulAcento);
+        img5.setBounds(733, 43, 600, 500);
+        defauult.add(img5);
+        
+        img6 = new JLabel("°");
+        img6.setFont(puntos1);
+        img6.setForeground(azulAcento);
+        img6.setBounds(765, 55, 600, 500);
+        defauult.add(img6);
+        
+        img7 = new JLabel("°");
+        img7.setFont(puntos1);
+        img7.setForeground(azulAcento);
+        img7.setBounds(795, 86, 600, 500);
+        defauult.add(img7);
+        
+        img8 = new JLabel("°");
+        img8.setFont(puntos1);
+        img8.setForeground(azulAcento);
+        img8.setBounds(494, 43, 600, 500);
+        defauult.add(img8);
+        
+        img9 = new JLabel("°");
+        img9.setFont(puntos1);
+        img9.setForeground(azulAcento);
+        img9.setBounds(463, 55, 600, 500);
+        defauult.add(img9);
+        
+        img10 = new JLabel("°");
+        img10.setFont(puntos1);
+        img10.setForeground(azulAcento);
+        img10.setBounds(433, 86, 600, 500);
+        defauult.add(img10);
+        
+        aceptar = new JButton("Guardar huellas");
+        aceptar.setBounds(500, 520, 200, 50);
+        aceptar.setBackground(blanco);
+        aceptar.setBorder(BorderFactory.createLineBorder(azulAcento, 2));
+        aceptar.setFont(new java.awt.Font("Arial", 0, 18));
+        aceptar.setForeground(azulAcento);
+        aceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
+        defauult.add(aceptar);
 
         defauult.setVisible(true);
         add(defauult);
@@ -318,7 +400,7 @@ public class Guarda21 extends javax.swing.JFrame {
                         stop();
                         setTemplate(Reclutador.getTemplate());
                         System.out.println("La Plantilla de la Huella ha Sido Creada, ya puede Verificarla o Identificarla");
-                        
+                        contador++;
                         GHuella();
                         break;
 
@@ -457,10 +539,11 @@ public class Guarda21 extends javax.swing.JFrame {
         return MSJ;
     }
     //Quitale el hilo si no lo estas probando solo >:v
+    int contador;
     Date date = new Date();
     Font titulop, tit;
     Font titulopb, titb;
-    Font subtitulos;
+    Font subtitulos, puntos1, puntos2;
     Color azul;
     Color azulAcento;
     Color blanco;
@@ -470,12 +553,12 @@ public class Guarda21 extends javax.swing.JFrame {
     JLabel titulo2, tituloBold2, subtituloEntradaOk, imagenEntradaOk;
     JLabel subtituloSalidaOk, imagenSalidaOk;
     JLabel subtituloEntrada, imagenEntrada;
-    JLabel subtituloSalida, imagenSalida;
+    JLabel subtituloSalida, imagenSalida,  img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11;
     JPanel arriba, abajo;
     JTextField usuario;
     JPasswordField contrasena;
     JSeparator lineaUsr, lineaCont;
-    JButton alumnos, grupos, profesor, modificacion, configuracion, cerrar;
+    JButton alumnos, grupos, profesor, modificacion, configuracion, cerrar, aceptar;
     JPanel defauult, permitirEntrada, permitirSalida, denegarEntrada, denegarSalida;
     Timer timer = new Timer(1000, new ActionListener() {
         public void actionPerformed(ActionEvent e) {

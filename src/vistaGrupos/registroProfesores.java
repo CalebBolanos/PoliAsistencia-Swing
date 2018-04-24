@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javafx.beans.value.ChangeListener;
@@ -313,6 +315,12 @@ public class registroProfesores implements ActionListener {
                                             if(evaluar == 0){
                                                 Guarda21 g2 = new Guarda21(3,gen, nom, pat, mat, fecha, bol);
                                                 g2.setVisible(true);
+                                                g2.addWindowListener(new WindowAdapter() {
+                                                    @Override
+                                                    public void windowClosed(WindowEvent e) {
+                                                        g2.setVisible(true);
+                                                    }
+                                                });
                                                 idReg = g2.getID();
                                                 if(idReg>0){
                                                     numero.setText("");
