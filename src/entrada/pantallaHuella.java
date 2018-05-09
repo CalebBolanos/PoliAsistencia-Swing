@@ -378,7 +378,6 @@ public class pantallaHuella extends javax.swing.JFrame {
             try {
                 System.out.println("Ya se puede usar la huella");
                 Reclutador.addFeatures(featuresinscripcion);
-                entradaBien("Ayax", "fecha mamalona");
                 identificarHuella();
                 Reclutador.clear();
             } catch (DPFPImageQualityException ex) {
@@ -445,14 +444,16 @@ public class pantallaHuella extends javax.swing.JFrame {
                 if (result.isVerified()) {
                     //spAsistencia(in idP int)
                     rs = bd.ejecuta("call spAsistencia(" + idPersona + ");");
+                    DateFormat hourdateFormat= new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+                    date= new Date();
                     while (rs.next()) {
                         System.out.println(rs.getString("msj"));
                     }
-                    DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+                    //hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
                     entradaBien(nombre, hourdateFormat.format(date));
                     JOptionPane.showMessageDialog(null, "La huella es de: " + nombre, "Mensaje", JOptionPane.INFORMATION_MESSAGE);
                     //Aqui se pondria la pantalla donde despliega la informacion del alumno para saber si pasa o nel
-
+                    
                     return;
                 }
 
