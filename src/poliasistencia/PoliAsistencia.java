@@ -17,6 +17,7 @@ public class PoliAsistencia {
     public static void main(String[] args) {
         login ventana = new login();
         ventana.crearComponentes(true);
+        //System.out.println("Present Project Directory : "+ System.getProperty("user.dir").replace("\\", "/"));
     }
     
 }

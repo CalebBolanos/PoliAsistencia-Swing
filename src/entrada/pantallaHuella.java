@@ -378,7 +378,6 @@ public class pantallaHuella extends javax.swing.JFrame {
             try {
                 System.out.println("Ya se puede usar la huella");
                 Reclutador.addFeatures(featuresinscripcion);
-                entradaBien("Ayax", "fecha mamalona");
                 identificarHuella();
                 Reclutador.clear();
             } catch (DPFPImageQualityException ex) {
@@ -448,6 +447,7 @@ public class pantallaHuella extends javax.swing.JFrame {
                     while (rs.next()) {
                         System.out.println(rs.getString("msj"));
                     }
+                    date= new Date();
                     DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
                     entradaBien(nombre, hourdateFormat.format(date));
                     JOptionPane.showMessageDialog(null, "La huella es de: " + nombre, "Mensaje", JOptionPane.INFORMATION_MESSAGE);
