@@ -9,17 +9,20 @@ import controlador.sesion;
 import controlador.traerDatos;
 import vistaUsuarios.*;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
@@ -151,7 +154,7 @@ public class configuracion implements ActionListener, MouseListener {
 
     @Override
     public void actionPerformed(ActionEvent a) {
-        ventana.dispose();
+
         if(a.getSource() == cerrar){
             inicio abrir = new inicio();
             abrir.crearComponentes(true);
@@ -171,6 +174,15 @@ public class configuracion implements ActionListener, MouseListener {
             editarPersonal abrir = new editarPersonal();
             abrir.crearComponentes(true);
         }
+        if(a.getSource() == info){
+            try{
+                Desktop.getDesktop().browse(new URI("https://www.google.com"));
+            }
+            catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Pagina no disponible por el momento");
+            }
+        }
+        ventana.dispose();
     }
     //Es para hacer los botones mas bonitos xd
     @Override

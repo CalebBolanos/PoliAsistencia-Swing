@@ -94,7 +94,7 @@ public class grupos implements ActionListener, MouseListener, KeyListener {
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Modificar Grupos");
+        titulo = new JLabel("Selecciona un Grupo");
         titulo.setBounds(500, 5, 700, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);

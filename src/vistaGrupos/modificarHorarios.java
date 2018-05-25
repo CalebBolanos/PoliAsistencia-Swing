@@ -100,7 +100,7 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
         ventana.add(titulo);
 
         ImageIcon atras = new ImageIcon(new ImageIcon(getClass().getResource("/img/atras.png")).getImage());
-        cerrar = new JButton("<html>&nbsp;Elegir Profesor</html>", atras);
+        cerrar = new JButton("<html>&nbsp;Regresar</html>", atras);
         cerrar.setBounds(20, 23, 200, 50);
         cerrar.setBackground(azulAcento);
         cerrar.setBorder(BorderFactory.createLineBorder(blanco, 2));
@@ -175,7 +175,7 @@ public class modificarHorarios implements ActionListener, MouseListener, KeyList
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            elegirProfesor abrir = new elegirProfesor();
+            inicioUnidades abrir = new inicioUnidades();
             abrir.crearComponentes(true);
         }
         

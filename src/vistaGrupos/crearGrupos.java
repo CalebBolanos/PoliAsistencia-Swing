@@ -93,7 +93,7 @@ public class crearGrupos implements ActionListener, MouseListener, KeyListener {
     }
     
     public crearGrupos(String datos[]) {
-        ventana = new JFrame("Modificar grupo - PoliAsistencia");
+        ventana = new JFrame("Crear grupo - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image icono = new ImageIcon(getClass().getResource("/img/poliAsistencia.png")).getImage();
@@ -104,8 +104,8 @@ public class crearGrupos implements ActionListener, MouseListener, KeyListener {
         semes = Integer.parseInt(datos[2]);
         are = Integer.parseInt(datos[3]);
         tur = Integer.parseInt(datos[4]);
-        titu = "Modificar Grupo";
-        sBoton = "Modificar Grupo";
+        titu = "Crear Grupo";
+        sBoton = "Crear Grupo";
     }
 
     public void crearComponentes(boolean permiso) {

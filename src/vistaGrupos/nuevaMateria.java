@@ -86,7 +86,7 @@ public class nuevaMateria implements ActionListener, MouseListener, KeyListener 
         nomMat = "";
         semes = 0;
         are = 0;
-        titu = "Nueva Unidad";
+        titu = "Crear Unidad";
     }
     public nuevaMateria(String datos[]) {
         ventana = new JFrame("Modificar Unidad - PoliAsistencia");

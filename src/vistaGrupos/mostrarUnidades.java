@@ -94,7 +94,7 @@ public class mostrarUnidades implements ActionListener, MouseListener, KeyListen
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Unidades");
+        titulo = new JLabel("Modificación de Unidades");
         titulo.setBounds(500, 5, 700, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
