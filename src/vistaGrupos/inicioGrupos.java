@@ -45,7 +45,7 @@ public class inicioGrupos implements ActionListener, MouseListener {
     JTextField usuario;
     JPasswordField contrasena;
     JSeparator lineaUsr, lineaCont;
-    JButton materias, grupos, profesor, modificacion, configuracion, cerrar;
+    JButton materias, grupos, profesor, modificacion, configuracion, cerrar, crearHorario;
 
     public inicioGrupos() {
         ventana = new JFrame("Grupos - PoliAsistencia");
@@ -105,7 +105,7 @@ public class inicioGrupos implements ActionListener, MouseListener {
 
         ImageIcon iconProfe = new ImageIcon(new ImageIcon(getClass().getResource("/img/books.png")).getImage());
         profesor = new JButton("<html><center>Asignar Unidades<br>a grupos</center></html>", iconProfe);
-        profesor.setBounds(430, 150, 380, 150);
+        profesor.setBounds(170, 150, 380, 150);
         profesor.setBackground(blanco);
         profesor.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         profesor.setFont(new java.awt.Font("Arial", 0, 25));
@@ -114,6 +114,17 @@ public class inicioGrupos implements ActionListener, MouseListener {
         profesor.addMouseListener(this);
         profesor.addActionListener(this);
         ventana.add(profesor);
+        
+        crearHorario = new JButton("<html><center>Crear<br>horarios</center></html>", iconProfe);
+        crearHorario.setBounds(700, 150, 380, 150);
+        crearHorario.setBackground(blanco);
+        crearHorario.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        crearHorario.setFont(new java.awt.Font("Arial", 0, 25));
+        crearHorario.setForeground(azulAcento);
+        crearHorario.setFocusPainted(false);
+        crearHorario.addMouseListener(this);
+        crearHorario.addActionListener(this);
+        ventana.add(crearHorario);
 
         ImageIcon iconGrupo = new ImageIcon(new ImageIcon(getClass().getResource("/img/grupo.png")).getImage());
         grupos = new JButton("<html><center>Modificación de<br>datos grupos</center></html>", iconGrupo);
@@ -183,7 +194,7 @@ public class inicioGrupos implements ActionListener, MouseListener {
             abrir.crearComponentes(true);
         }
         if(a.getSource() == profesor){
-            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos();
+            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos(1);
             abrir.crearComponentes(true);
         }
         if(a.getSource() == modificacion){
@@ -196,6 +207,10 @@ public class inicioGrupos implements ActionListener, MouseListener {
         }
         if(a.getSource() == grupos){
             grupos abrir = new grupos();
+            abrir.crearComponentes(true);
+        }
+        if(a.getSource() == crearHorario){
+            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos(2);
             abrir.crearComponentes(true);
         }
     }

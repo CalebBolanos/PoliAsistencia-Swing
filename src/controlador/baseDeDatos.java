@@ -42,7 +42,7 @@ public class baseDeDatos {
             Class.forName(this.driverClassName).newInstance();
             this.conn = DriverManager.getConnection(this.urlBD, this.usrBD, this.passBD);
  
-        } catch (Exception err) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException err) {
             System.out.println("Error " + err.getMessage());
         }
     }

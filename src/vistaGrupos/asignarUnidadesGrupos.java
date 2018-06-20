@@ -67,9 +67,9 @@ public class asignarUnidadesGrupos implements ActionListener, MouseListener, Key
     JScrollPane scrollpane;
     String[] columnNames = { "Grupo", "Semestre", "Turno", "Especialidad"};
     Object[][] datos;
-    
+    int _tipo=0;
 
-    public asignarUnidadesGrupos() {
+    public asignarUnidadesGrupos(int tipoAcc) {
         ventana = new JFrame("Asignar unidades a Grupos - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,6 +79,7 @@ public class asignarUnidadesGrupos implements ActionListener, MouseListener, Key
         ventana.setLayout(null);
         traerDatos td = new traerDatos();
         datos = td.grupos();
+        _tipo = tipoAcc;
     }
 
     public void crearComponentes(boolean permiso) {
@@ -215,8 +216,14 @@ sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getSelectedRow() == i) {
                 ventana.dispose();
-                unidadesGrupos abrir = new unidadesGrupos((String)tabla.getValueAt(i, 0));
-                abrir.crearComponentes(true);
+                if(_tipo == 1){
+                    unidadesGrupos abrir = new unidadesGrupos((String)tabla.getValueAt(i, 0));
+                    abrir.crearComponentes(true);
+                }else{
+                    asignarHorario abrir = new asignarHorario((String)tabla.getValueAt(i, 0));
+                    abrir.crearComponentes(true);
+                }
+                
             }
         }
     }

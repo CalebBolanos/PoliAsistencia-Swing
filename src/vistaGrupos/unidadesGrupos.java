@@ -237,7 +237,7 @@ public class unidadesGrupos implements ActionListener, MouseListener, KeyListene
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos();
+            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos(1);
             abrir.crearComponentes(true);
         }
         
@@ -252,7 +252,7 @@ public class unidadesGrupos implements ActionListener, MouseListener, KeyListene
             }
             JOptionPane.showMessageDialog(ventana, "Grupo Modificado correctamente");
             ventana.dispose();
-            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos();
+            asignarUnidadesGrupos abrir = new asignarUnidadesGrupos(1);
             abrir.crearComponentes(true);
         }
             
