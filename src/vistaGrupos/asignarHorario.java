@@ -34,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import vistaUsuarios.editarAlumnos;
 
@@ -171,7 +172,8 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
             tabla.setValueAt(horas[i], i, 0);
         }
         tabla.addMouseListener(this);
-        tabla.isCellEditable(0, 0);
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabla.setCellSelectionEnabled(true);
         scrollpane = new JScrollPane(tabla);
 
         scrollpane.setBounds(50, 150, 950, 400);
@@ -267,6 +269,15 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         if(a.getSource() == btnAceptar){
             if(unidad.getSelectedIndex() != 0){
                 tabla.setValueAt(unidad.getSelectedItem().toString(), seleccionI, seleccionJ);
+                //tabla.clearSelection();
+                diaHoraSel.setText("Selccione una hora");
+                unidad.setSelectedIndex(0);
+                unidad.setVisible(false);
+                unidadLab.setVisible(false);
+                btnAceptar.setVisible(false);
+                tabla.changeSelection(seleccionI, seleccionJ, false, false);
+                seleccionI = 0;
+                seleccionJ = 0;
             }else{
                 JOptionPane.showMessageDialog(ventana, "Seleccione una unidad", "Error", JOptionPane.ERROR_MESSAGE);
             }
