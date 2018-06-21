@@ -197,8 +197,25 @@ public class Guarda21 extends javax.swing.JFrame {
         Reclutador.clear();
         start();
         stop();
-        JOptionPane.showMessageDialog(Guarda21.this, "Usuario guardado correctamente", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
+        int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar otra huella?", "Huella guardada correctamente", JOptionPane.YES_NO_OPTION);
+        switch(resp){
+            case 0:
+                GuardaVarias g= new GuardaVarias(retID, 0);
+                g.setVisible(true);
+                this.dispose();
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(Guarda21.this, "El usuario guardo 1 huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                break;
+            case -1:
+                JOptionPane.showMessageDialog(Guarda21.this, "El usuario guardo 1 huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                break;
+            default:
+                this.dispose();
+                break;
+        }
 
     }
 

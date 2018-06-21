@@ -1,4 +1,5 @@
 /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -59,7 +60,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-public class Guarda2 extends javax.swing.JFrame {
+public class GuardaVarias extends javax.swing.JFrame {
 
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnSalir;
@@ -70,9 +71,9 @@ public class Guarda2 extends javax.swing.JFrame {
     private javax.swing.JPanel panHuellas;
     private static int GEN, retID;
     private static String NOM, PAT, MAT, FECH, BOL, MSJ;
-    private static int IDENTI;
+    private static int DEDO;
 
-    public Guarda2() {
+    public GuardaVarias() {
 
         setTitle("Entrada/Salida");
         setBounds(30, 30, 1300, 650);
@@ -84,7 +85,7 @@ public class Guarda2 extends javax.swing.JFrame {
         initComponents();
     }
 
-    public Guarda2(int gen, String nom, String pat, String mat, String fech, String bol) {
+    public GuardaVarias(int aidi, int dd) {
 
         setTitle("Guarda Alumno");
         setBounds(30, 30, 1300, 650);
@@ -94,12 +95,8 @@ public class Guarda2 extends javax.swing.JFrame {
         setResizable(false);
         setLayout(null);
         initComponents();
-        GEN = gen;
-        NOM = nom;
-        PAT = pat;
-        FECH = fech;
-        BOL = bol;
-        MAT = mat;
+        retID = aidi;
+        DEDO = dd;
     }
 
     private void initComponents() {
@@ -193,27 +190,32 @@ public class Guarda2 extends javax.swing.JFrame {
         Reclutador.clear();
         start();
         stop();
-        int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar otra huella?", "Huella guardada correctamente", JOptionPane.YES_NO_OPTION);
-        switch(resp){
-            case 0:
-                GuardaVarias g= new GuardaVarias(retID, 0);
-                g.setVisible(true);
-                this.dispose();
-                break;
-            case 1:
-                JOptionPane.showMessageDialog(Guarda2.this, "El usuario guardo 1 huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-                break;
-            case -1:
-                JOptionPane.showMessageDialog(Guarda2.this, "El usuario guardo 1 huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-                break;
-            default:
-                this.dispose();
-                break;
+
+        if (DEDO < 9) {
+            int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar otra huella?", "Huella guardada correctamente", JOptionPane.YES_NO_OPTION);
+            switch (resp) {
+                case 0:
+                    int d = DEDO + 1;
+                    GuardaVarias g = new GuardaVarias(retID, d);
+                    g.setVisible(true);
+                    this.dispose();
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(GuardaVarias.this, "El usuario guardo "+(DEDO+1)+" huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    break;
+                case -1:
+                    JOptionPane.showMessageDialog(GuardaVarias.this, "El usuario guardo "+(DEDO+1)+" huellas exitosamente.", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    break;
+                default:
+                    this.dispose();
+                    break;
+            }
+        } else {
+            JOptionPane.showMessageDialog(GuardaVarias.this, "Se han guardado las 10 huellas del usuario", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
+            
         }
-        
-        
 
     }
 
@@ -341,7 +343,7 @@ public class Guarda2 extends javax.swing.JFrame {
                         Reclutador.clear();
                         stop();
                         setTemplate(null);
-                        JOptionPane.showMessageDialog(Guarda2.this, "La Plantilla de la Huella no pudo ser creada, Repita el Proceso", "Inscripcion de Huellas Dactilares", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(GuardaVarias.this, "La Plantilla de la Huella no pudo ser creada, Repita el Proceso", "Inscripcion de Huellas Dactilares", JOptionPane.ERROR_MESSAGE);
                         start();
                         break;
                 }
@@ -384,18 +386,10 @@ public class Guarda2 extends javax.swing.JFrame {
 
         ByteArrayInputStream datosHuella = new ByteArrayInputStream(template.serialize());
         Integer tamanoHuella = template.serialize().length;
-        int id = 0;
+        int id = retID;
         try {
             baseDeDatos bd = new baseDeDatos();
             bd.conectar();
-            ResultSet rs = bd.ejecuta("call spGuardaAlumnos(" + GEN + ", '" + PAT + "', '" + MAT
-                    + "', '" + NOM + "', '" + FECH + "', 'sinasignar', '" + BOL + "', 1);");
-            while (rs.next()) {
-                id = rs.getInt("idP");
-                MSJ = rs.getString("msj");
-            }
-            System.out.println("IDP: " + id);
-            retID = id;
             if (id > 0) {
                 Connection c = bd.getConexion();
                 //create function fGuardaHuella(idP int, hu longblob) returns nvarchar(100)
