@@ -191,7 +191,7 @@ public class GuardaVarias extends javax.swing.JFrame {
         start();
         stop();
 
-        if (DEDO < 9) {
+        if (DEDO < 8) {
             int resp = JOptionPane.showConfirmDialog(null, "¿Desea guardar otra huella?", "Huella guardada correctamente", JOptionPane.YES_NO_OPTION);
             switch (resp) {
                 case 0:
@@ -214,7 +214,7 @@ public class GuardaVarias extends javax.swing.JFrame {
             }
         } else {
             JOptionPane.showMessageDialog(GuardaVarias.this, "Se han guardado las 10 huellas del usuario", "Inscripcion de Huellas Dactilares", JOptionPane.INFORMATION_MESSAGE);
-            
+            this.dispose();
         }
 
     }
