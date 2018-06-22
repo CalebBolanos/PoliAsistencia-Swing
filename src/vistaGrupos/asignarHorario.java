@@ -64,17 +64,19 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
     JComboBox semestres, unidad;
     DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     JFormattedTextField nacimiento;
-    String id = "", nomGrup="";
+    String id = "", nomGrup = "";
     DefaultTableModel modelo;
     JTable tabla;
     JScrollPane scrollpane;
     String[] columnNames = {"Hora", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"}, horas = new String[15];
     Object[][] datos;
     JOptionPane opcionesUnidades;
-    JLabel diaHoraSel,  unidadLab, profesorLab;
+    JLabel diaHoraSel, unidadLab, profesorLab;
     JButton btnAceptar;
     ArrayList<String[]> unidadesArr;
     int seleccionI = 0, seleccionJ = 0;
+    String datoS[][][];
+    ArrayList<String> unidadAEliminar = new ArrayList<>();
 
     public asignarHorario(String grupo) {
         ventana = new JFrame("Unidades - PoliAsistencia");
@@ -108,7 +110,7 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
         ventana.add(titulo);
-        
+
         agreg = new JButton("Guardar horario");
         agreg.setBounds(1070, 23, 200, 50);
         agreg.setBackground(azulAcento);
@@ -117,7 +119,7 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         agreg.setForeground(blanco);
         agreg.addActionListener(this);
         ventana.add(agreg);
-        
+
         ImageIcon atras = new ImageIcon(new ImageIcon(getClass().getResource("/img/atras.png")).getImage());
         cerrar = new JButton("<html>&nbsp;Inicio</html>", atras);
         cerrar.setBounds(20, 23, 200, 50);
@@ -168,7 +170,6 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         tabla.setRowHeight(50);
         tabla.getColumnModel().getColumn(0).setPreferredWidth(7);
         for (int i = 0; i < 15; i++) {
-
             tabla.setValueAt(horas[i], i, 0);
         }
         tabla.addMouseListener(this);
@@ -178,20 +179,20 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
 
         scrollpane.setBounds(50, 150, 950, 400);
         ventana.add(scrollpane);
-        
+
         diaHoraSel = new JLabel("Selccione una hora");
         diaHoraSel.setBounds(1005, 160, 300, 40);
         diaHoraSel.setFont(subtitulos);
         diaHoraSel.setForeground(azulAcento);
         ventana.add(diaHoraSel);
-        
+
         unidadLab = new JLabel("Unidad: ");
         unidadLab.setBounds(1005, 200, 300, 40);
         unidadLab.setFont(subtitulos);
         unidadLab.setForeground(Color.gray);
         ventana.add(unidadLab);
         unidadLab.setVisible(false);
-        
+
         btnAceptar = new JButton("<html>&nbsp;Aceptar</html>");
         btnAceptar.setBounds(1005, 300, 280, 50);
         btnAceptar.setBackground(azulAcento);
@@ -202,7 +203,7 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         btnAceptar.addActionListener(this);
         ventana.add(btnAceptar);
         btnAceptar.setVisible(false);
-        
+
         traerDatos td = new traerDatos();
         String dobleArr[][] = td.materias();
         int tamanio = dobleArr.length;
@@ -219,6 +220,17 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         unidad.setFont(titulopb);
         ventana.add(unidad);
         unidad.setVisible(false);
+
+        datoS = td.unidadesHorarioGrupoFacil(nomGrup);
+        if (datoS != null) {
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 6; j++) {
+                    if (datoS[i][j][0] != null) {
+                        tabla.setValueAt(datoS[i][j][0], i - 1, j);
+                    }
+                }
+            }
+        }
 
         sub = new JLabel("Da clic en un recuadro para asignar la unidad");
         sub.setBounds(290, 573, 1000, 40);
@@ -257,7 +269,8 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         }
         if (a.getSource() == agreg) {
             int opc = JOptionPane.showConfirmDialog(ventana, "¿Esta seguro de guardar el horario?", "Confirmación", JOptionPane.OK_CANCEL_OPTION);
-            if(opc==0){
+            if (opc == 0) {
+                compararYborrar();
                 guardarHorar();
                 JOptionPane.showMessageDialog(ventana, "Guardado correctamente");
                 ventana.dispose();
@@ -265,9 +278,9 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
                 abrir.crearComponentes(true);
             }
         }
-        
-        if(a.getSource() == btnAceptar){
-            if(unidad.getSelectedIndex() != 0){
+
+        if (a.getSource() == btnAceptar) {
+            if (unidad.getSelectedIndex() != 0) {
                 tabla.setValueAt(unidad.getSelectedItem().toString(), seleccionI, seleccionJ);
                 //tabla.clearSelection();
                 diaHoraSel.setText("Selccione una hora");
@@ -278,12 +291,10 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
                 tabla.changeSelection(seleccionI, seleccionJ, false, false);
                 seleccionI = 0;
                 seleccionJ = 0;
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(ventana, "Seleccione una unidad", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
-        
 
     }
 
@@ -295,8 +306,14 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
                     //JOptionPane.showMessageDialog(ventana, (String)tabla.getValueAt(i, j));
                     seleccionI = i;
                     seleccionJ = j;
-                    diaHoraSel.setText(columnNames[j] + "  "+  horas[i]);
-                    unidad.setSelectedIndex(0);
+                    diaHoraSel.setText(columnNames[j] + "  " + horas[i]);
+                    if (tabla.getValueAt(i, j) != null) {
+                        for (int k = 0; k < unidad.getItemCount(); k++) {
+                            if (unidad.getItemAt(k).toString().equals(tabla.getValueAt(i, j).toString())) {
+                                unidad.setSelectedIndex(k);
+                            }
+                        }
+                    }
                     unidad.setVisible(true);
                     unidadLab.setVisible(true);
                     btnAceptar.setVisible(true);
@@ -339,44 +356,82 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         controlador.filtro filtrar = new controlador.filtro();
         filtrar.buscar(cadena, tabla);
     }
-    
-    private boolean guardarHorar(){
+
+    private boolean guardarHorar() {
         boolean ret = false, entrar = false;
-        int coincidencias=0, idU=0;
+        int coincidencias = 0, idU = 0;
         String arrS[] = new String[2];
-        unidadesArr = new ArrayList<>();unidades unid = new unidades();
+        unidadesArr = new ArrayList<>();
+        unidades unid = new unidades();
         for (int i = 0; i < tabla.getRowCount(); i++) {
             for (int j = 1; j < tabla.getColumnCount(); j++) {
-                if(tabla.getValueAt(i, j) != null){
-                    if(!"".equals(tabla.getValueAt(i, j).toString())){
-                        if(unidadesArr.size()<1){
-                            arrS = new String[2];
-                            arrS[0] = tabla.getValueAt(i, j).toString();
-                            arrS[1]= ""+unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
-                            idU = Integer.parseInt(arrS[1]);
-                            unid.horarioGrupo(idU, nomGrup);
-                            unid.guardarUnidadHorario(idU, i+1, i+2, j);
-                            unidadesArr.add(arrS);
-                        }
-                        else{
-                            for(int k = 0; k<unidadesArr.size(); k++){
-                                if(tabla.getValueAt(i, j).toString().equals(unidadesArr.get(k)[0])){
+                if (tabla.getValueAt(i, j) != null) {
+                    if (!"".equals(tabla.getValueAt(i, j).toString())) {
+                        if (unidadesArr.size() < 1) {
+                            if (datoS[i+1][j][0] == null) {
+                                arrS = new String[2];
+                                arrS[0] = tabla.getValueAt(i, j).toString();
+                                arrS[1] = "" + unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
+                                idU = Integer.parseInt(arrS[1]);
+                                unid.horarioGrupo(idU, nomGrup);
+                                unid.guardarUnidadHorario(idU, i + 1, i + 2, j);
+                                unidadesArr.add(arrS);
+                            } else {
+                                for (int k = 0; k < unidadAEliminar.size(); k++) {
+                                    if (unidadAEliminar.get(k).equals(datoS[i+1][j][1])) {
+                                        arrS = new String[2];
+                                        arrS[0] = tabla.getValueAt(i, j).toString();
+                                        arrS[1] = "" + unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
+                                        idU = Integer.parseInt(arrS[1]);
+                                        unid.horarioGrupo(idU, nomGrup);
+                                        unid.guardarUnidadHorario(idU, i + 1, i + 2, j);
+                                        unidadesArr.add(arrS);
+                                    } else {
+                                        unidadesArr.add(datoS[i+1][j]);
+                                    }
+                                }
+                            }
+
+                        } else {
+                            for (int k = 0; k < unidadesArr.size(); k++) {
+                                if (tabla.getValueAt(i, j).toString().equals(unidadesArr.get(k)[0])) {
                                     coincidencias++;
                                     idU = Integer.parseInt(unidadesArr.get(k)[1]);
                                 }
                             }
-                            if(coincidencias<1){
-                                arrS = new String[2];
-                                arrS[0] = tabla.getValueAt(i, j).toString();
-                                arrS[1]= ""+unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
-                                idU = Integer.parseInt(arrS[1]);
-                                unid.horarioGrupo(idU, nomGrup);
-                                unid.guardarUnidadHorario(idU, i+1, i+2, j);
-                                unidadesArr.add(arrS);
-                            }else{
-                                unid.guardarUnidadHorario(idU, i+1, i+2, j);
+                            if (coincidencias < 1) {
+                                if (datoS[i+1][j][0] == null) {
+                                    arrS = new String[2];
+                                    arrS[0] = tabla.getValueAt(i, j).toString();
+                                    arrS[1] = "" + unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
+                                    idU = Integer.parseInt(arrS[1]);
+                                    unid.horarioGrupo(idU, nomGrup);
+                                    unid.guardarUnidadHorario(idU, i + 1, i + 2, j);
+                                    unidadesArr.add(arrS);
+                                } else {
+                                    for (int k = 0; k < unidadAEliminar.size(); k++) {
+                                        if (unidadAEliminar.get(k).equals(datoS[i+1][j][1])) {
+                                            arrS = new String[2];
+                                            arrS[0] = tabla.getValueAt(i, j).toString();
+                                            arrS[1] = "" + unid.guardarUnidad(tabla.getValueAt(i, j).toString(), 50);
+                                            idU = Integer.parseInt(arrS[1]);
+                                            unid.horarioGrupo(idU, nomGrup);
+                                            unid.guardarUnidadHorario(idU, i + 1, i + 2, j);
+                                            unidadesArr.add(arrS);
+                                        } else {
+                                            unidadesArr.add(datoS[i+1][j]);
+                                        }
+                                    }
+                                }
+                            } else {
+                                for (int k = 0; k < unidadAEliminar.size(); k++) {
+                                    if (unidadAEliminar.get(k).equals(datoS[i+1][j][1]) || datoS[i+1][j][0] == null) {
+                                        unid.guardarUnidadHorario(idU, i + 1, i + 2, j);
+                                    }
+                                }
+
                             }
-                            coincidencias=0;
+                            coincidencias = 0;
                             idU = 0;
                         }
                     }
@@ -385,6 +440,44 @@ public class asignarHorario implements ActionListener, MouseListener, KeyListene
         }
         System.out.println("Tamaño: " + unidadesArr.size());
         return ret;
+    }
+
+    private void compararYborrar() {
+        unidades uni = new unidades();
+        if (datoS != null) {
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 6; j++) {
+                    if (datoS[i][j][0] != null) {
+                        String s1 = datoS[i][j][0];
+                        if (tabla.getValueAt(i-1, j) != null) {
+                            if (!datoS[i][j][0].equals(tabla.getValueAt(i-1, j).toString())) {
+                                String s2 = tabla.getValueAt(i-1, j).toString();
+                                if(unidadAEliminar.size()>0)
+                                    for (int k = 0; k < unidadAEliminar.size(); k++) {
+                                        if (!unidadAEliminar.get(k).equals(tabla.getValueAt(i-1, j))) {
+                                            unidadAEliminar.add(datoS[i][j][1]);
+                                        }
+                                    }
+                                else
+                                    unidadAEliminar.add(datoS[i][j][1]);
+                            }
+                        } else {
+                            if(unidadAEliminar.size()>0)
+                                for (int k = 0; k < unidadAEliminar.size(); k++) {
+                                    if (!unidadAEliminar.get(k).equals(tabla.getValueAt(i-1, j))) {
+                                        unidadAEliminar.add(datoS[i][j][1]);
+                                    }
+                                }
+                            else
+                                unidadAEliminar.add(datoS[i][j][1]);
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < unidadAEliminar.size(); i++) {
+            uni.quitaHorario(Integer.parseInt(unidadAEliminar.get(i)));
+        }
     }
 
 }

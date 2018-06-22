@@ -6,7 +6,10 @@
 package controlador;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -762,6 +765,32 @@ public class traerDatos {
             if(ret[i] == null){
                 ret[i]="0";
             }
+        }
+        return ret;
+    }
+    
+    public String[][][] unidadesHorarioGrupoFacil(String grupo){
+        String ret[][][] = new String[15][6][2];
+        try {
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("select * from vwunidadeshorarios where grupo = '"+ grupo + "';");
+            while(rs.next()){
+                int dia = rs.getInt("idDia");
+                int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
+                int resta = horaF-horIn, aumento=0;
+                String materia = rs.getString("materia");
+                int unidadd = rs.getInt("idUnidad");
+                while(resta>0){
+                    resta--;
+                    ret[horIn+aumento][dia][0] = materia;
+                    ret[horIn+aumento][dia][1] = unidadd+"";
+                    aumento++;
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(traerDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ret;
     }
