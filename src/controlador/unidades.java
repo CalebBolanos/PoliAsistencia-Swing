@@ -169,4 +169,19 @@ public class unidades {
         return ret;
     }
     
+    public String agregarEspecialidad(String noombre){
+        String ret = "Error";
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spGuardaArea('" + noombre + "', 'POL'  );");
+            while(rs.next()){
+                ret= rs.getString("msj");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            this.msj = e.getMessage();
+        }
+        return ret;
+    }
 }

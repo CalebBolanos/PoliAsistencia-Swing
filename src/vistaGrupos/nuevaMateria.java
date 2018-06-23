@@ -5,6 +5,7 @@
  */
 package vistaGrupos;
 
+import controlador.traerDatos;
 import controlador.unidades;
 import controlador.validaciones;
 import java.awt.Color;
@@ -14,6 +15,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -45,7 +48,7 @@ import vistaUsuarios.editarAlumnos;
  *
  * @author PoliAsistencia
  */
-public class nuevaMateria implements ActionListener, MouseListener, KeyListener {
+public class nuevaMateria implements ActionListener, MouseListener, KeyListener, ItemListener {
 
     JFrame ventana;
     Font titulop;
@@ -159,7 +162,7 @@ public class nuevaMateria implements ActionListener, MouseListener, KeyListener 
         abajo.setBackground(blanco);
         abajo.setLayout(null);
         
-        sub = new JLabel("Para agregar un Grupo de Aprendizaje, debe de llenar el siguiente formulario");
+        sub = new JLabel("Para agregar una unidad de Aprendizaje, debe de llenar el siguiente formulario");
         sub.setBounds(170, 30, 900, 40);
         sub.setFont(subtitulos);
         sub.setForeground(azulAcento);
@@ -211,18 +214,20 @@ public class nuevaMateria implements ActionListener, MouseListener, KeyListener 
         abajo.add(descripcion);
         
         especialidad = new JComboBox();
+        traerDatos td = new traerDatos();
+        String datosAreas[] = td.traerAreas();
         especialidad.addItem("Seleccione una opción");
-        especialidad.addItem("Tronco común");
-        especialidad.addItem("Sistemas Digitales");
-        especialidad.addItem("Máquinas con Sistemas Automatizados");
-        especialidad.addItem("Programación");
+        for (String datosArea : datosAreas) {
+            especialidad.addItem(datosArea);
+        }
+        especialidad.addItem("Agregar nueva especialidad");
         especialidad.setBounds(470, 260, 530, 30);
         especialidad.setBorder(BorderFactory.createLineBorder(azulAcento, 0));
         especialidad.setBackground(blanco);
         especialidad.setForeground(Color.gray);
         especialidad.setFont(titulopb);
         especialidad.setSelectedIndex(are);
-        especialidad.addActionListener(this);
+        especialidad.addItemListener(this);
         abajo.add(especialidad);
         
         //50
@@ -405,29 +410,7 @@ public class nuevaMateria implements ActionListener, MouseListener, KeyListener 
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        for (int i = 0; i < tablaDisponible.getRowCount(); i++) {
-            if (tablaDisponible.getSelectedRow() == i) {
-                String[] pasarFila= {(String)tablaDisponible.getValueAt(i, 0), (String)tablaDisponible.getValueAt(i, 1), (String)tablaDisponible.getValueAt(i, 2), (String)tablaDisponible.getValueAt(i, 3), (String)tablaDisponible.getValueAt(i, 4), (String)tablaDisponible.getValueAt(i, 5), (String)tablaDisponible.getValueAt(i, 6)};          
-                
-                agregarAsignar = (DefaultTableModel) tablaAsignar.getModel();
-                agregarAsignar.addRow(pasarFila);
-                
-                eliminarDisponible = (DefaultTableModel) tablaDisponible.getModel();
-                eliminarDisponible.removeRow(i);
-            }
-        }
         
-        for(int j=0; j<tablaAsignar.getRowCount(); j++){
-            if(tablaAsignar.getSelectedRow() == j){
-                String[] pasarF = {(String) tablaAsignar.getValueAt(j, 0), (String) tablaAsignar.getValueAt(j, 1), (String) tablaAsignar.getValueAt(j, 2), (String) tablaAsignar.getValueAt(j, 3), (String) tablaAsignar.getValueAt(j, 4), (String) tablaAsignar.getValueAt(j, 5), (String) tablaAsignar.getValueAt(j, 6),};
-                
-                agregarDisponible = (DefaultTableModel) tablaDisponible.getModel();
-                agregarDisponible.addRow(pasarF);
-                
-                eliminarAsignar = (DefaultTableModel) tablaAsignar.getModel();
-                eliminarAsignar.removeRow(j);
-            }
-        }
     }
 
     @Override
@@ -465,6 +448,24 @@ public class nuevaMateria implements ActionListener, MouseListener, KeyListener 
         String cadena = (buscarDisponible.getText()).toUpperCase();
         controlador.filtro filtrar = new controlador.filtro();
         filtrar.buscar(cadena, tablaDisponible);
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        int maximo = especialidad.getItemCount() - 1;
+        if(maximo == especialidad.getSelectedIndex()){
+            String nuevo = JOptionPane.showInputDialog(ventana, "Ingrese la nueva especialidad", "Agregar especialidad", JOptionPane.DEFAULT_OPTION);
+            unidades uni = new unidades();
+            String retu = uni.agregarEspecialidad(nuevo);
+            JOptionPane.showMessageDialog(ventana, retu);
+            if(retu.equals("Guardado correctamente")){
+                especialidad.removeItemAt(maximo);
+                especialidad.addItem(nuevo);
+                especialidad.addItem("Agregar nueva especialidad");
+                especialidad.setSelectedIndex(maximo);
+            }
+        }
+        System.out.println(especialidad.getSelectedItem().toString());
     }
         
     }

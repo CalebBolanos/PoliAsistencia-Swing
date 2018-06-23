@@ -794,4 +794,25 @@ public class traerDatos {
         }
         return ret;
     }
+    
+    public String[] traerAreas(){
+        ArrayList<String> array = new ArrayList<>();
+        
+        baseDeDatos bd = new baseDeDatos();
+        try{
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("select * from areas");
+            while(rs.next()){
+                array.add(rs.getString("area"));
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        String ret[] = new String[array.size()];
+        for(int i = 0; i<array.size(); i++){
+            ret[i] = array.get(i);
+        }
+        return ret;
+    }
 }
