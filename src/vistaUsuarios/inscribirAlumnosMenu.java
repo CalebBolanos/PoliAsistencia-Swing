@@ -133,7 +133,7 @@ public class inscribirAlumnosMenu implements ActionListener, MouseListener {
             abrir.crearComponentes(true);
         }
         if(a.getSource() == adentro){
-            alumnoRegular abrir = new alumnoRegular();
+            alumnoRegular abrir = new alumnoRegular(0);
             abrir.crearComponentes(true);
         }
         if(a.getSource() == afuera){

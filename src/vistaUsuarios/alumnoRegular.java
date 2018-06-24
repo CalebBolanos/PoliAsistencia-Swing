@@ -57,8 +57,9 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
     Object[] agregar = {confirm, contrasenaConfirmacion};
     String[] columnNames = { "Boleta", "Nombre", "Apellido Paterno", "Apellido Materno", "Genero"};
     Object[][] datos;
+    int _tipoAl = 0;
 
-    public alumnoRegular() {
+    public alumnoRegular(int tipoAl) {
         ventana = new JFrame("Seleccionar Alumno - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +69,7 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
         ventana.setLayout(null);
         traerDatos td = new traerDatos();
         datos = td.datosAlumnosRegulare();
+        this._tipoAl = tipoAl;
     }
 
     public void crearComponentes(boolean permiso) {
@@ -201,9 +203,15 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
     public void mouseClicked(MouseEvent me) {
         for (int i = 0; i < tabla.getRowCount(); i++) {
             if (tabla.getSelectedRow() == i) {
-                ventana.dispose();
-                alumnoGrupo abrir = new alumnoGrupo((String)tabla.getValueAt(i, 0));
-                abrir.crearComponentes(true);
+                if(_tipoAl == 0){
+                    ventana.dispose();
+                    alumnoGrupo abrir = new alumnoGrupo((String)tabla.getValueAt(i, 0));
+                    abrir.crearComponentes(true);
+                }else{
+                    ventana.dispose();
+                    gestionarAlumno abrir = new gestionarAlumno((String)tabla.getValueAt(i, 0));
+                    abrir.crearComponentes(true);
+                }
             }
         }
 

@@ -184,4 +184,37 @@ public class unidades {
         }
         return ret;
     }
+    
+     public String unidadAlumno(int idUnidad, String boleta){
+        String ret = "";
+        //create procedure spGuardaUnidadesProfesor(in unidad int, in profesor nvarchar(200))
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spGuardaUnidadesAlumno("+idUnidad + ", '" + boleta + "');");
+            while(rs.next()){
+                ret = rs.getString("msj");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            ret = e.getMessage();
+        }
+        return ret;
+    }
+    
+    public String quitarUnidadAlumno(int idUnidad, String boleta){
+        String ret = "";
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("call spBorraAlumnoUnidad("+idUnidad + ", '" + boleta + "');");
+            while(rs.next()){
+                ret = rs.getString("msj");
+            }
+            bd.cierraConexion();
+        }catch(Exception e){
+            ret = e.getMessage();
+        }
+        return ret;
+    }
 }

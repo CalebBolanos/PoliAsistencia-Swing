@@ -815,4 +815,195 @@ public class traerDatos {
         }
         return ret;
     }
+    
+    public String[][] unidadesHorarioAlumnos(){
+        String horas[] = {"---", "07:00", "08:00", "09:00", "10:00", "11:00",
+        "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"};
+        ArrayList<String[]> arr = new ArrayList<>();
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("select * from vwunidadeshorarios;");
+            int contador=0;
+            int idUnidad=0;
+            String dato[]=new String[8];
+            while(rs.next()){
+                if(rs.getInt("idUnidad") == idUnidad){
+                    dato[6] = rs.getString("Nombre");
+                    dato[0] = rs.getString("materia");
+                    int dia = rs.getInt("idDia");
+                    int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
+                    String horario = horas[horIn] + " - " + horas[horaF];
+                    dato[dia] = horario;
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[0] = rs.getString("materia");
+                        dato[6] = rs.getString("Nombre");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                }else{
+                    if(contador==1){
+                        dato[7] = idUnidad+"";
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                    idUnidad = rs.getInt("idUnidad");
+                    contador=1;
+                    dato = new String[8];
+                    int dia = rs.getInt("idDia");
+                    int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
+                    String horario = horas[horIn] + " - " + horas[horaF];
+                    dato[dia] = horario;
+                    dato[0] = rs.getString("materia");
+                    dato[6] = rs.getString("Nombre");
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[0] = rs.getString("materia");
+                        dato[6] = rs.getString("Nombre");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                }                
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        int tamanio = arr.size();
+        String ret[][] = new String[tamanio][8];
+        for (int i = 0; i < tamanio; i++) {
+            ret[i] = arr.get(i);
+        }
+        return ret;
+    }
+    
+    public String[][] unidadesHorarioAlumno(String grupo){
+        String horas[] = {"---", "07:00", "08:00", "09:00", "10:00", "11:00",
+        "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"};
+        ArrayList<String[]> arr = new ArrayList<>();
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("select * from vwUnidadesAlumnos where boleta = '"+ grupo + "';");
+            int contador=0;
+            int idUnidad=0;
+            String dato[]=new String[8];
+            while(rs.next()){
+                if(rs.getInt("idUnidad") == idUnidad){
+                    dato[0] = rs.getString("materia");
+                    dato[6] = rs.getString("Nombre");
+                    int dia = rs.getInt("idDia");
+                    int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
+                    String horario = horas[horIn] + " - " + horas[horaF];
+                    dato[dia] = horario;
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[6] = rs.getString("Nombre");
+                        dato[0] = rs.getString("materia");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                }else{
+                    if(contador==1){
+                        dato[7] = idUnidad+"";
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                    idUnidad = rs.getInt("idUnidad");
+                    contador=1;
+                    dato = new String[8];
+                    int dia = rs.getInt("idDia");
+                    int horIn = rs.getInt("idHorarioI"), horaF = rs.getInt("idHorarioF");
+                    String horario = horas[horIn] + " - " + horas[horaF];
+                    dato[dia] = horario;
+                    dato[0] = rs.getString("materia");
+                    dato[6] = rs.getString("Nombre");
+                    dato[7] = idUnidad+"";
+                    if(rs.isLast()){
+                        dato[7] = idUnidad+"";
+                        dato[6] = rs.getString("Nombre");
+                        dato[0] = rs.getString("materia");
+                        for(int i = 1; i<6; i++){
+                            if(dato[i] == null)
+                                dato[i] = "---";
+                        }
+                        arr.add(dato); 
+                    }
+                }                
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        int tamanio = arr.size();
+        String ret[][] = new String[tamanio][8];
+        for (int i = 0; i < tamanio; i++) {
+            ret[i] = arr.get(i);
+        }
+        return ret;
+    }
+    
+    public int[][][] unidadesHorarioSinFormatoAlumno(String grupo){
+        ArrayList<int[]> arr1 = new ArrayList<>();
+        ArrayList<int[]> arr2 = new ArrayList<>();
+        try{
+            baseDeDatos bd = new baseDeDatos();
+            bd.conectar();
+            ResultSet rs = bd.ejecuta("select * from vwUnidadesAlumnos where boleta = '"+ grupo + "';");
+            int contador=0;
+            int idUnidad=0;
+            int dato1[]=new int[5];
+            int dato2[]=new int[5];
+            while(rs.next()){
+                if(rs.getInt("idUnidad") == idUnidad){
+                    int dia = rs.getInt("idDia")-1;
+                    dato1[dia] = rs.getInt("idHorarioI");
+                    dato2[dia] = rs.getInt("idHorarioF");
+                    if(rs.isLast()){
+                        arr1.add(dato1); 
+                        arr2.add(dato2); 
+                    }
+                }else{
+                    if(contador==1){
+                        arr1.add(dato1); 
+                        arr2.add(dato2);
+                    }
+                    idUnidad = rs.getInt("idUnidad");
+                    contador=1;
+                    dato1=new int[5];
+                    dato2=new int[5];
+                    int dia = rs.getInt("idDia")-1;
+                    dato1[dia]= rs.getInt("idHorarioI");
+                    dato1[dia] = rs.getInt("idHorarioF");
+                    if(rs.isLast()){
+                        arr1.add(dato1); 
+                        arr2.add(dato2); 
+                    }
+                }                
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        int tamanio = arr1.size();
+        int ret[][][] = new int[2][tamanio][5];
+        for (int i = 0; i < tamanio; i++) {
+            ret[0][i] = arr1.get(i);
+            ret[1][i] = arr2.get(i);
+        }
+        return ret;
+    }
 }

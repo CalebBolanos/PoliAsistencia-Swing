@@ -232,7 +232,7 @@ public class alumnoGrupo implements ActionListener, MouseListener, KeyListener {
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            alumnoRegular abrir = new alumnoRegular();
+            alumnoRegular abrir = new alumnoRegular(0);
             abrir.crearComponentes(true);
         }
         
@@ -255,7 +255,7 @@ public class alumnoGrupo implements ActionListener, MouseListener, KeyListener {
                 if(ms.equalsIgnoreCase("ok")){
                     JOptionPane.showMessageDialog(ventana, "Alumno inscrito");
                     ventana.dispose();
-                    alumnoRegular abrir = new alumnoRegular();
+                    alumnoRegular abrir = new alumnoRegular(0);
                     abrir.crearComponentes(true);
                 }else
                     JOptionPane.showMessageDialog(ventana,  gC.getMsj(), "Error", JOptionPane.ERROR_MESSAGE);

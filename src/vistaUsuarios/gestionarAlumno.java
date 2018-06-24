@@ -5,6 +5,8 @@
  */
 package vistaUsuarios;
 
+import controlador.traerDatos;
+import controlador.unidades;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -59,29 +62,35 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
     JComboBox semestre, especialidad;
     ButtonGroup turno;
     JRadioButton matutino, vespertino;
-    String id = "";
+    private String  nombreS;
     JScrollPane scrollpane, disponibles, asignar;
     JSeparator linea;
     DefaultTableModel modDisoponible, modAsignar, agregarAsignar, eliminarAsignar, agregarDisponible, eliminarDisponible;
     JTable tablaDisponible, tablaAsignar;
-    String[] columna = { "Semestre", "Grupo", "Unidad", "Profesor", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
-    Object[][] datosDisponeble
-            = {
-                {"5", "5IM7","Física III", "Pedrickies", "---", "11:00 - 12:00", "---", "12:00 - 14:00", "7:00 - 9:00"},
-                {"4", "4IM4","Cálculo Diferencial", "Citlali", "8:00 - 9:00", "12:00 - 13:00", "11:00 - 13:00", "8:00 - 9:00", "---"},
-            };
-    
+    String[] columna = { "Unidad", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Profesor", "ID"};
+    Object[][] datosDisponeble, datosAsignados;
+    private ArrayList<int[]> horasInicioArr = new ArrayList<>();
+    private ArrayList<int[]> horasFinalesArr = new ArrayList<>();
 
-    public gestionarAlumno(String id) {
-        this.id = id;
-        System.out.println(id);
-        ventana = new JFrame("Gestionar Alumno - PoliAsistencia");
-        ventana.setBounds(30, 30, 1300, 650);
+    public gestionarAlumno(String nombreR) {
+        nombreS = nombreR;
+        ventana = new JFrame("Agregar unidades a alumno - PoliAsistencia");
+        ventana.setBounds(10, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image icono = new ImageIcon(getClass().getResource("/img/poliAsistencia.png")).getImage();
         ventana.setIconImage(icono);
         ventana.setResizable(false);
         ventana.setLayout(null);
+        traerDatos td = new traerDatos();
+        int datosHOR[][][] = td.unidadesHorarioSinFormatoAlumno(nombreS);
+        int horasII[][] = datosHOR[0];
+        int horasFF[][] = datosHOR[1];
+        datosDisponeble = td.unidadesHorarioAlumnos();
+        datosAsignados = td.unidadesHorarioAlumno(nombreS);
+        for(int i = 0; i<datosAsignados.length; i++){
+            horasInicioArr.add(horasII[i]);
+            horasFinalesArr.add(horasFF[i]);
+        }
     }
 
     public void crearComponentes(boolean permiso) {
@@ -96,24 +105,24 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
         titulop = new Font("Calibri", 0, 60);
 
         //Titulos
-        titulo = new JLabel("Gestionar Alumno");
-        titulo.setBounds(400, 5, 700, 100);
+        titulo = new JLabel("Agregar unidades a alumno");
+        titulo.setBounds(280, 5, 800, 100);
         titulo.setFont(titulop);
         titulo.setForeground(blanco);
         ventana.add(titulo);
 
         ImageIcon atras = new ImageIcon(new ImageIcon(getClass().getResource("/img/atras.png")).getImage());
-        cerrar = new JButton("<html>&nbsp;Seleccionar Alumno</html>", atras);
+        cerrar = new JButton("<html>&nbsp;Ver Unidades</html>", atras);
         cerrar.setBounds(20, 23, 200, 50);
         cerrar.setBackground(azulAcento);
         cerrar.setBorder(BorderFactory.createLineBorder(blanco, 2));
-        cerrar.setFont(new java.awt.Font("Arial", 0, 17));
+        cerrar.setFont(new java.awt.Font("Arial", 0, 19));
         cerrar.setForeground(blanco);
         cerrar.setFocusPainted(false);
         cerrar.addActionListener(this);
         ventana.add(cerrar);
         
-        agreg = new JButton("Guardar Cambios");
+        agreg = new JButton("Guardar");
         agreg.setBounds(1070, 23, 200, 50);
         agreg.setBackground(azulAcento);
         agreg.setBorder(BorderFactory.createLineBorder(blanco, 2));
@@ -136,14 +145,24 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
         
 
         abajo = new JPanel(new GridLayout());
-        abajo.setPreferredSize(new Dimension(1300, 500));
+        abajo.setPreferredSize(new Dimension(1300, 1000));
         //abajo.setBounds(0, 100, 1300, 570);
         abajo.setBackground(blanco);
         abajo.setLayout(null);
         
+        sub = new JLabel("Boleta: " + nombreS);
+        sub.setBounds(170, 30, 900, 40);
+        sub.setFont(subtitulos);
+        sub.setForeground(azulAcento);
+        abajo.add(sub);
         
-        descripcion = new JLabel("Da clic en una unidad de aprendizaje para agregarla o eliminarla de las unidades que el alumno debe cursar");
-        descripcion.setBounds(30, 10, 1400, 40);
+        descripcion = new JLabel("Unidades de Aprendizaje");
+        descripcion.setBounds(540, 700, 400, 50);
+        descripcion.setFont(titulopb);
+        abajo.add(descripcion);
+        
+        descripcion = new JLabel("Da clic en una materia para cambiarla de tabla");
+        descripcion.setBounds(400, 100, 900, 40);
         descripcion.setFont(subtitulos);
         descripcion.setForeground(azulAcento);
         abajo.add(descripcion);
@@ -152,19 +171,22 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
         unidades.setBackground(whitesmoke);
         unidades.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         unidades.setLayout(null);
-        unidades.setBounds(30, 60, 1220, 450);
+        unidades.setBounds(30, 170, 1220, 510);
         
         modDisoponible = new DefaultTableModel(datosDisponeble, columna);
         tablaDisponible = new JTable(modDisoponible);
         tablaDisponible.addMouseListener(this);
         tablaDisponible.setDefaultEditor(Object.class, null);
+        tablaDisponible.getColumnModel().getColumn(7).setPreferredWidth(0);
+        tablaDisponible.getColumnModel().getColumn(7).setResizable(false);
+        
         tablaDisponible.getTableHeader().setReorderingAllowed(false);
         
         disponibles = new JScrollPane(tablaDisponible);
-        disponibles.setBounds(5, 50, 600, 390);
+        disponibles.setBounds(5, 50, 600, 450);
         unidades.add(disponibles);
         
-        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades de Aprendizaje</html>");
+        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades de Aprendizaje Disponibles</html>");
         sub.setBounds(5, 20, 599, 30);
         sub.setFont(subtitulos);
         sub.setFont(titulopb);
@@ -175,17 +197,19 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
         
         
         
-        modAsignar = new DefaultTableModel(null, columna);
+        modAsignar = new DefaultTableModel(datosAsignados, columna);
         tablaAsignar = new JTable(modAsignar);
         tablaAsignar.addMouseListener(this);
         tablaAsignar.setDefaultEditor(Object.class, null);
+        tablaAsignar.getColumnModel().getColumn(7).setPreferredWidth(0);
+        tablaAsignar.getColumnModel().getColumn(7).setResizable(false);
         tablaAsignar.getTableHeader().setReorderingAllowed(false);
         
         asignar = new JScrollPane(tablaAsignar);
-        asignar.setBounds(610, 50, 600, 390);
+        asignar.setBounds(610, 50, 600, 450);
         unidades.add(asignar);
         
-        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+id+"</html>");
+        sub = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades de Aprendizaje a Asignar</html>");
         sub.setBounds(610, 20, 599, 30);
         sub.setFont(subtitulos);
         sub.setFont(titulopb);
@@ -213,27 +237,23 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
 
         if (a.getSource() == cerrar) {
             ventana.dispose();
-            seleccionarAlumno abrir = new seleccionarAlumno();
+            alumnoRegular abrir = new alumnoRegular(1);
             abrir.crearComponentes(true);
         }
         
-        if (a.getSource() == guardar) {
-            /*
-            * -1 = cerrado
-            * 0 = si
-            * 1 = no
-             */
-                JOptionPane.showMessageDialog(ventana, "Datos Guardados correctamente");
-                ventana.dispose();
-                editarAlumnos abrir = new editarAlumnos();
-                abrir.crearComponentes(true);
+        if (a.getSource() == agreg) {
+        int tamanioA = modAsignar.getRowCount(), tamanioD = modDisoponible.getRowCount();
+            unidades unid = new unidades();
+            for(int i = 0; i<tamanioA; i++){
+                unid.unidadAlumno(Integer.parseInt((String)modAsignar.getValueAt(i, 7)), nombreS);
             }
-        if(a.getSource() == agreg){
-            JOptionPane.showMessageDialog(ventana, "Datos guardados");
+            for(int i = 0; i<tamanioD; i++){
+                unid.quitarUnidadAlumno(Integer.parseInt((String)modDisoponible.getValueAt(i, 7)), nombreS);
+            }
+            JOptionPane.showMessageDialog(ventana, "Grupo Modificado correctamente");
             ventana.dispose();
-            seleccionarAlumno abrir = new seleccionarAlumno();
+            alumnoRegular abrir = new alumnoRegular(1);
             abrir.crearComponentes(true);
-            
         }
             
         }
@@ -242,20 +262,66 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
     public void mouseClicked(MouseEvent me) {
         for (int i = 0; i < tablaDisponible.getRowCount(); i++) {
             if (tablaDisponible.getSelectedRow() == i) {
-                String[] pasarFila= {(String)tablaDisponible.getValueAt(i, 0), (String)tablaDisponible.getValueAt(i, 1), (String)tablaDisponible.getValueAt(i, 2), (String)tablaDisponible.getValueAt(i, 3), (String)tablaDisponible.getValueAt(i, 4), (String)tablaDisponible.getValueAt(i, 5), (String)tablaDisponible.getValueAt(i, 6), (String)tablaDisponible.getValueAt(i, 7), (String)tablaDisponible.getValueAt(i, 8)};          
+                String[] pasarFila= {(String)tablaDisponible.getValueAt(i, 0), (String)tablaDisponible.getValueAt(i, 1), (String)tablaDisponible.getValueAt(i, 2), (String)tablaDisponible.getValueAt(i, 3), (String)tablaDisponible.getValueAt(i, 4), (String)tablaDisponible.getValueAt(i, 5), (String)tablaDisponible.getValueAt(i, 6),(String) tablaDisponible.getValueAt(i, 7)};          
+                String[] horasString = new String[5];
+                boolean sinIter=false;
+                int horasInicio[] = new int[5], horasFinal[] = new int[5];
+                for(int j = 0; j<5; j++){
+                    String horaIn="", horaFin="";
+                    horasString[j] = (String)tablaDisponible.getValueAt(i, j+1);
+                    if(horasString[j].equals("---")){
+                        horasInicio[j] = 0;
+                        horasFinal[j] = 0;
+                    }else{
+                        horasInicio[j] = Integer.parseInt(horasString[j].charAt(0) + "" + horasString[j].charAt(1)+"");
+                        horasFinal[j] = Integer.parseInt(horasString[j].charAt(8) + "" + horasString[j].charAt(9)+"");
+                    }
+                }
+                int tamanio = horasInicioArr.size();
+                int errores=0;
+                if(tamanio>0){
+                    for(int j = 0; j<tamanio; j++){
+                        int compIn[] = horasInicioArr.get(j),compFin[] = horasFinalesArr.get(j);
+                        for(int w = 0; w<5;w++){
+                            if(compIn[w] >0){
+                                if(horasInicio[w]>0)
+                                    if(horasInicio[w]<compFin[w])
+                                        if(horasFinal[w]>compIn[w])
+                                            errores++;
+                            }
+                        }
+                    }
+                    if(errores>0){
+                        tablaDisponible.clearSelection();
+                        JOptionPane.showMessageDialog(ventana, "Alumno con clase en esa hora", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        horasInicioArr.add(horasInicio);
+                        horasFinalesArr.add(horasFinal);
+                        agregarAsignar = (DefaultTableModel) tablaAsignar.getModel();
+                        agregarAsignar.addRow(pasarFila);
+
+                        eliminarDisponible = (DefaultTableModel) tablaDisponible.getModel();
+                        eliminarDisponible.removeRow(i);
+                    }
+                }else{
+                    horasInicioArr.add(horasInicio);
+                    horasFinalesArr.add(horasFinal);
+                    agregarAsignar = (DefaultTableModel) tablaAsignar.getModel();
+                    agregarAsignar.addRow(pasarFila);
+
+                    eliminarDisponible = (DefaultTableModel) tablaDisponible.getModel();
+                    eliminarDisponible.removeRow(i);
+                    }
                 
-                agregarAsignar = (DefaultTableModel) tablaAsignar.getModel();
-                agregarAsignar.addRow(pasarFila);
                 
-                eliminarDisponible = (DefaultTableModel) tablaDisponible.getModel();
-                eliminarDisponible.removeRow(i);
             }
         }
         
         for(int j=0; j<tablaAsignar.getRowCount(); j++){
             if(tablaAsignar.getSelectedRow() == j){
-                String[] pasarF = {(String) tablaAsignar.getValueAt(j, 0), (String) tablaAsignar.getValueAt(j, 1), (String) tablaAsignar.getValueAt(j, 2), (String) tablaAsignar.getValueAt(j, 3), (String) tablaAsignar.getValueAt(j, 4), (String) tablaAsignar.getValueAt(j, 5), (String) tablaAsignar.getValueAt(j, 6), (String) tablaAsignar.getValueAt(j, 7), (String) tablaAsignar.getValueAt(j, 8)};
-                
+                String[] pasarF = {(String) tablaAsignar.getValueAt(j, 0), (String) tablaAsignar.getValueAt(j, 1), (String) tablaAsignar.getValueAt(j, 2), (String) tablaAsignar.getValueAt(j, 3), (String) tablaAsignar.getValueAt(j, 4), (String) tablaAsignar.getValueAt(j, 5), (String) tablaAsignar.getValueAt(j, 6),(String) tablaAsignar.getValueAt(j, 7)};
+                horasInicioArr.remove(j);
+                horasFinalesArr.remove(j);
                 agregarDisponible = (DefaultTableModel) tablaDisponible.getModel();
                 agregarDisponible.addRow(pasarF);
                 
