@@ -250,7 +250,7 @@ public class gestionarAlumno implements ActionListener, MouseListener, KeyListen
             for(int i = 0; i<tamanioD; i++){
                 unid.quitarUnidadAlumno(Integer.parseInt((String)modDisoponible.getValueAt(i, 7)), nombreS);
             }
-            JOptionPane.showMessageDialog(ventana, "Grupo Modificado correctamente");
+            JOptionPane.showMessageDialog(ventana, "Alumno inscrito correctamente");
             ventana.dispose();
             alumnoRegular abrir = new alumnoRegular(1);
             abrir.crearComponentes(true);

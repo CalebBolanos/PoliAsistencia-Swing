@@ -55,7 +55,7 @@ public class alumnoRegular implements ActionListener, MouseListener, KeyListener
     JScrollPane scrollpane;
     DefaultTableModel modelo;
     Object[] agregar = {confirm, contrasenaConfirmacion};
-    String[] columnNames = { "Boleta", "Nombre", "Apellido Paterno", "Apellido Materno", "Genero"};
+    String[] columnNames = { "Boleta", "Nombre", "Apellido Paterno", "Apellido Materno", "Estado"};
     Object[][] datos;
     int _tipoAl = 0;
 

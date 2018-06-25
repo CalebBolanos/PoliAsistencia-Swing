@@ -49,7 +49,7 @@ public class traerDatos {
         baseDeDatos bd = new baseDeDatos();
         try{
             bd.conectar();
-            ResultSet rs = bd.ejecuta("select * from vwAlumnos where estado = 'regular';");
+            ResultSet rs = bd.ejecuta("select * from vwAlumnos;");
             while(rs.next()){
                 String junto[] = new String[5];
                 junto[0] = rs.getString("boleta");
