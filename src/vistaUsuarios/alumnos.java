@@ -69,6 +69,7 @@ public class alumnos implements ActionListener {
         gen = Integer.parseInt(dat[4]);
         bol = dat[5];
         fecNam = dat[6];
+        this.id = dat[7];
         ventana = new JFrame("Alumno - PoliAsistencia");
         ventana.setBounds(30, 30, 1300, 650);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

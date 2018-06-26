@@ -99,7 +99,7 @@ public class traerDatos {
     }
     
     public String[] datoIndividual(String boleta){
-        String ret[] = new String[7];
+        String ret[] = new String[8];
         String genero="";
         baseDeDatos bd = new baseDeDatos();
         try{
@@ -126,6 +126,7 @@ public class traerDatos {
                 }
                 ret[5] = rs.getString("bol");
                 ret[6] = rs.getString("fec");
+                ret[7] = rs.getString("idPr");
             }
             bd.cierraConexion();
         }catch(Exception e){
