@@ -182,10 +182,13 @@ public class inicio implements ActionListener, MouseListener {
 
     @Override
     public void actionPerformed(ActionEvent a) {
-        ventana.dispose();
         if(a.getSource() == cerrar){
-            poliasistencia.login abrir = new poliasistencia.login();
-            abrir.crearComponentes(true);
+            int seg = JOptionPane.showConfirmDialog(ventana, "¿Seguro de cerrar sesión?", "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+            if(seg==0){
+                ventana.dispose();
+                poliasistencia.login abrir = new poliasistencia.login();
+                abrir.crearComponentes(true);
+            }
         }
         if(a.getSource() == configuracion){
             configuracion abrir = new configuracion();
