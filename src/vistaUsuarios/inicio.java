@@ -170,18 +170,22 @@ public class inicio implements ActionListener, MouseListener {
             }
         }
         if(a.getSource() == configuracion){
+            ventana.dispose();
             configuracion abrir = new configuracion();
             abrir.crearComponentes(true);
         }
         if(a.getSource() == alumnos){
+            ventana.dispose();
             registroAlumnos abrir = new registroAlumnos();
             abrir.crearComponentes(true);
         }
         if(a.getSource() == modificacion){
+            ventana.dispose();
             editarAlumnos abrir = new editarAlumnos();
             abrir.crearComponentes(true);
         }
         if(a.getSource() == grupos){
+            ventana.dispose();
             elegirOpcion abrir = new elegirOpcion();
             abrir.crearComponentes(true);
         }
